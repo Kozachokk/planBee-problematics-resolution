@@ -1,0 +1,28 @@
+.problem{
+    border: 2px solid var(--bg2-color);
+    min-height: 10vh;
+    max-width: 65vw;
+    padding: 10px;
+    border-radius: 15px;
+    box-shadow: rgba(0, 0, 0, 0.19) 0px 10px 20px, rgba(0, 0, 0, 0.23) 0px 6px 6px;
+
+    h2{
+        margin: 0 5px 10px 0;
+    }
+
+    .subtitle{
+        font-weight: 100;
+        font-size: 1.25rem;
+    }
+
+    .input-solution{
+        width: 80%;
+    }
+    .submit-solution{
+        width:20%;
+    }
+}
+
+.problem + .problem{
+    margin-top: 15px;
+}

@@ -1,0 +1,21 @@
+:root{
+    --bg1-color: #0d404e;
+    --bg2-color: #155263;
+    --bg3-color: #ff6f3c;
+    --fg1-color: #ffa639;
+    --fg2-color: #ffc93c;
+}
+
+body{
+    background-color: var(--bg1-color);
+    color: var(--fg1-color);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+}
+
+* {
+    margin:0;
+    box-sizing: border-box;
+}
