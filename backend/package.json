@@ -1,0 +1,14 @@
+{
+  "name": "backend",
+  "version": "0.1.0",
+  "description": "Backend solution for planBee-problematics-resolution",
+  "main": "app.js",
+  "scripts": {
+    "dev": "node src/app.js"
+  },
+  "author": "Kozachokk",
+  "license": "ISC",
+  "dependencies": {
+    "express": "^5.3.0"
+  }
+}
