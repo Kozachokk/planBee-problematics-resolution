@@ -4,8 +4,10 @@ function Login(){
     return(
         <div className="formBox">
             <form onSubmit={login}>
-                <label htmlFor="secretcode">Login Id</label>
-                <input type="text" id="loginid"></input>
+                <label htmlFor="username">Login Id</label>
+                <input type="text" id="username" name='username'></input>
+                <label htmlFor="password">Login Id</label>
+                <input type="text" id="password" name='password'></input>
                 <button type="submit">Login</button>
             </form>
         </div>
