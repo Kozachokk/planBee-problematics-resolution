@@ -1,5 +1,6 @@
 import express from 'express'
 import db from '../db.js'
+import { validateIdParam } from '../middleware/dataValidation.js';
 
 const problemRouter = express.Router();
 
@@ -16,15 +17,7 @@ const safelyDeleteProblem = db.transaction((problemId) => {
     deleteProblem.run(problemId);
 })
 
-problemRouter.param("id", (req, res, next) => {
-    //Validate problem id to not waste resource on a useless query
-    if(isNaN(req.params.id) || req.params.id <= 0){
-        res.status(400).send("The problem with id: " + req.params.id + " doesn't exist.");
-        return;
-    }
-    next();
-})
-
+problemRouter.param("id", validateIdParam)
 
 // get all problems
 problemRouter.get("/", (req, res) => {
