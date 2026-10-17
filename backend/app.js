@@ -1,13 +1,14 @@
 import express from 'express';
 import "dotenv/config"
 import rootRouter from './routes/rootRouter.js';
-import loginRouter from './routes/loginRouter.js';
+import authRouter from './routes/loginRouter.js';
 import cors from 'cors';
 import cookieParser from 'cookie-parser';
 import helmet from 'helmet';
+import { authenticate } from './middleware/authentication.js';
 
 const logger = (req, res, next) => {
-  console.log(Date.now() + "~" + req.method + ": " + req.path)
+  console.log(new Date().toUTCString() + " ~ " + req.method + ": " + req.path)
   next();
 }
 
@@ -18,8 +19,9 @@ app.use(express.json());
 app.use(cookieParser());
 app.use(logger);
 
+app.use("/auth", authRouter)
+app.use(authenticate)
 app.use("/", rootRouter)
-app.use("/login", loginRouter)
 
 app.listen(process.env.PORT, () => {
   console.log(`App listening on port ${process.env.PORT}`);
