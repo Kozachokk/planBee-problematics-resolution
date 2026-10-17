@@ -82,10 +82,10 @@ problemRouter.post("/add", (req, res) => {
 
 // delete post
 problemRouter.delete("/delete/:id", (req, res) => {
-    const problem = getSpecificProblem.run(req.params.id);
+    const problem = getSpecificProblem.get(req.params.id);
 
     // Check if user has permissions to do so
-    if(!req.userData.isAdmin && problem.createdBy != req.userData.username){
+    if(!req.userData.isAdmin && problem.username != req.userData.username){
         res.status(403).send("Cannot delete");
         return;
     }
