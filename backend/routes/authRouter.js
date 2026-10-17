@@ -10,8 +10,8 @@ const authRouter = express.Router();
 const getUser = db.prepare("SELECT userId FROM user WHERE username = ? AND password = ?;");
 
 authRouter.post('/login', (req, res) => {
-    const user = getUser.get(req.body.username, req.body.password);
     //Check if credentials are valid
+    const user = getUser.get(req.body.username, req.body.password);
     if(!user){
         res.status(400).send("Invalid username or password");
         return;

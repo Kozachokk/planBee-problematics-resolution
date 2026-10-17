@@ -8,7 +8,12 @@ export function authenticate(req, res, next){
 
     try{
         const decoded = jwt.verify(req.cookies.accessToken, process.env.JWTSECRET, {complete: false});
-        req.userData = decoded;
+        req.userData = {
+            userId: decoded.userId,
+            username: decoded.username,
+            isAdmin: decoded.isAdmin,
+            canCreateProblems: decoded.canCreateProblems
+        }
         next();
     }
     catch(err){
@@ -32,8 +37,8 @@ export function authenticate(req, res, next){
  * @returns object composed of refresh and access tokens
  */
 export function generateJWTokens(userId){
-    const getUserData = db.prepare("SELECT userId, isAdmin, canCreateProblems FROM user WHERE userId = ?;");
-    const userData = getUserData.run(userId);
+    const getUserData = db.prepare("SELECT userId, username, isAdmin, canCreateProblems FROM user WHERE userId = ?;");
+    const userData = getUserData.get(userId);
 
     const refreshPayload = {
         userId: userData.userId

@@ -3,7 +3,7 @@ import express from 'express';
 const rootRouter = express.Router();
 
 rootRouter.get("/", (req, res) => {
-    res.send("<h1>Hiiiii</h1>");
+    res.status(418).send("I don't know what to do, i'm just a teapot");
 })
 
 export default rootRouter;
