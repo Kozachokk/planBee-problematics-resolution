@@ -6,3 +6,7 @@ export function validateIdParam(req, res, next, id) {
     }
     next();
 }
+
+export function validateIntegerId(value){
+    return !(isNaN(value) || id <= value)
+}

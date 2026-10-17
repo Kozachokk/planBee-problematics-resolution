@@ -1,20 +1,22 @@
 import express from 'express'
 import db from '../db.js'
 import { validateIdParam } from '../middleware/dataValidation.js';
+import { deleteSolution, getAllSolutionOnProblem } from './solutionRouter.js';
 
 const problemRouter = express.Router();
 
 const getAllProblems = db.prepare("SELECT problemId, problem, username FROM problem INNER JOIN user ON problem.createdBy = user.userId;")
 const getSpecificProblem = db.prepare("SELECT problem, username FROM problem INNER JOIN user ON problem.createdBy = user.userId WHERE problemId = ?;")
 const addProblem = db.prepare("INSERT INTO problem(problem, createdBy) VALUES ( ?, ? );")
-const deleteAllSolutions = db.prepare("DELETE FROM solution WHERE problemId = ?;")
-const deleteProblem = db.prepare("DELETE FROM problem WHERE problemId = ?;")
 /**
  * Transaction that deletes problem's dependants and the problem itself
  */
-const safelyDeleteProblem = db.transaction((problemId) => {
-    deleteAllSolutions.run(problemId);
-    deleteProblem.run(problemId);
+const deleteProblem = db.transaction((problemId) => {
+    const deleteProblemFromTable = db.prepare("DELETE FROM problem WHERE problemId = ?;")
+    const solutions = getAllSolutionOnProblem.all(problemId);
+    solutions.forEach(solution => deleteSolution(solution.solutionId));
+
+    deleteProblemFromTable.run(problemId);
 })
 
 problemRouter.param("id", validateIdParam)
@@ -84,7 +86,7 @@ problemRouter.delete("/delete/:id", (req, res) => {
     }
 
     try{
-        safelyDeleteProblem(req.params.id);
+        deleteProblem(req.params.id);
         res.status(200).send("Successfully ignored problem!");
     }
     catch(err){
