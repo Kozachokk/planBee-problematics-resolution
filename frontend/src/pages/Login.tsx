@@ -14,6 +14,7 @@ function Login(){
         const requestOption:RequestInit = {
             method: "POST",
             headers: { 'Content-Type': 'application/json' },
+            credentials: "include",
             body: JSON.stringify({
                 username: (e.target.elements.namedItem("username") as HTMLInputElement).value,
                 password: (e.target.elements.namedItem("password") as HTMLInputElement).value
@@ -30,7 +31,7 @@ function Login(){
                 navigate("/")
             })
             .catch(error => {
-                setError(error);
+                setError(error + "");
             }
         )
     }
