@@ -1,49 +1,41 @@
-import type { ISolution } from "./components/Solution/ISolution";
-import Problem from "./components/Problem/Problem";
-import { useState } from "react";
-import type { IProblem } from "./components/Problem/IProblem";
+import Header from "./components/Header/Header";
+import Dashboard from "./pages/Dashboard";
+import Login from "./pages/Login";
+import { Route, Routes } from "react-router-dom";
+import { createContext, useState, type Dispatch, type SetStateAction } from "react";
 
-const solutions: ISolution[] = [
-  {
-    solutionId: 0,
-    disprovedBy: ["person 1"],
-    approvedBy: ["1", "2", "3"],
-    solutionPrompt: "Do somethings"
-  },
-  {
-    solutionId: 1,
-    approvedBy: ["waf"],
-    disprovedBy: ["fwaf", "woof"],
-    solutionPrompt: "Do nothing"
-  }
-]
+interface IUser{
+  userId: number,
+  username: string,
+  isAdmin: boolean,
+  canCreateProblems: boolean
+}
 
-const problemsPlaceholders: IProblem[] = [
-  {
-    problemId: 0,
-    problemPrompt: "Yes, this has become a really very big problem and we need to find a solution very fast for this incredibly hard problem lorem ipsum",
-    solutions: solutions
-  },
-  {
-    problemId: 1,
-    problemPrompt: "Yes, this is another very important problem lorem ipsus......has become a really very big problem and we need to find a solution very fast for this incredibly hard problem lorem ipsum",
-    solutions: solutions
-  }
-]
+interface IUserContext{
+  user?: IUser,
+  setUser?: Dispatch<SetStateAction<IUser | undefined>>
+}
+
+const [user, setUser] = useState<IUser>();
+
+export const UserContext = createContext<IUserContext>({user: user, setUser: setUser})
 
 function App(){
 
-  const [problems, setProblems] = useState<IProblem[]>(problemsPlaceholders);
+  const value: IUserContext = {
+    user:user, setUser:setUser
+  }
 
   return(
-    <main>
-      {problems.map(problem => <Problem 
-        problemId={problem.problemId}
-        problemPrompt={problem.problemPrompt}
-        solutions={problem.solutions}
-      />)}
-    </main>
+    <UserContext.Provider value={value}>
+      <Header/>
+      <Routes>
+        <Route path='/' element={<Dashboard />}/>
+        <Route path="login" element={<Login />}/>
+      </Routes>
+    </UserContext.Provider>
   )
 }
+
 
 export default App;
