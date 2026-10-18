@@ -46,9 +46,15 @@ function Login(){
     return(
         <div className="formBox">
             <form onSubmit={login}>
+<<<<<<< HEAD
                 <label htmlFor="username">username</label>
                 <input type="text" id="username" name='username'></input>
                 <label htmlFor="password">password</label>
+=======
+                <label htmlFor="username">Login Id</label>
+                <input type="text" id="username" name='username'></input>
+                <label htmlFor="password">Login Id</label>
+>>>>>>> origin/main
                 <input type="text" id="password" name='password'></input>
                 <button type="submit">Login</button>
             </form>
