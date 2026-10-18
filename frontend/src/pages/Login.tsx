@@ -1,10 +1,11 @@
-import { useContext, useState } from 'react';
-import { UserContext } from '../contexts/UserContext';
+import { useState } from 'react';
 import './login.css';
+import { useNavigate } from 'react-router-dom';
 
 function Login(){
 
     const [error, setError] = useState("");
+    const navigate = useNavigate()
 
     const login = (e: React.SubmitEvent<HTMLFormElement>) => {
         e.preventDefault();
@@ -21,21 +22,12 @@ function Login(){
 
         fetch(`${import.meta.env.VITE_BASE_API_URL}/auth/login`, requestOption)
             .then(async response => {
-                const isJson = response.headers.get("Content-Type")?.includes('application/json');
-                const data = isJson && await response.json();
-
                 if(!response.ok){
-                    const error = (data && data.message) || await response.text()
+                    const error = await response.text()
                     return Promise.reject(error);
                 }
 
-                console.log(response.headers);
-                useContext(UserContext)?.loginUser({
-                    userId: -1,
-                    username: "admin",
-                    isAdmin: true,
-                    canCreateProblems: true
-                });
+                navigate("/")
             })
             .catch(error => {
                 setError(error);
