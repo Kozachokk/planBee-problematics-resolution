@@ -4,4 +4,7 @@ import { defineConfig } from 'vite'
 // https://vite.dev/config/
 export default defineConfig({
   plugins: [react()],
+  define:{
+    VITE_BASE_API_URL: process.env.VITE_BASE_API_URL
+  }
 })
