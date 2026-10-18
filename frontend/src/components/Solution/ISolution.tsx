@@ -1,4 +1,4 @@
-export default interface ISolution {
+export interface ISolution {
     solutionId: number,
     solutionPrompt: string,
     approvedBy: string[],

@@ -1,6 +1,6 @@
-import type ISolution from '../Solution/ISolution';
+import type { ISolution } from '../Solution/ISolution';
 
-export default interface IProblem{
+export interface IProblem{
     problemId: number,
     problemPrompt: string,
     solutions: ISolution[];
