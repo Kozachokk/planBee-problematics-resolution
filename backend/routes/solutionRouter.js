@@ -9,7 +9,7 @@ export const getAllSolutionOnProblem = db.prepare("SELECT solutionId, solution, 
 const getSolution = db.prepare("SELECT solution, proposedBy FROM solution WHERE solutionId = ?;")
 const getFeedbackOnSolution = db.prepare("SELECT username, opinion FROM solution_user INNER JOIN user ON solution_user.userId = user.userId WHERE solutionId = ?;")
 const addSolution = db.prepare("INSERT INTO solution(solution, proposedBy, problemId) VALUES ( ?, ?, ? );")
-const addReaction = db.prepare("INSERT INTO solution_user(solutionId, userId, reaction) VALUES ( ?, ?, ? );")
+const addReaction = db.prepare("INSERT INTO solution_user(solutionId, userId, opinion) VALUES ( ?, ?, ? );")
 
 export const deleteSolution = db.transaction((solution) => {
     const deleteSolutionFromSolution_UserTable = db.prepare("DELETE FROM solution_user WHERE solutionId = ?;")
@@ -93,6 +93,7 @@ solutionRouter.delete("/:id", (req, res) => {
 
     if(!req.userData.isAdmin || solution.proposedBy != req.userData.username){
         res.status(403).send("Cannot delete");
+        return;
     }
 
     try{

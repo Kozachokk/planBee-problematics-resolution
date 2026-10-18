@@ -4,6 +4,7 @@ import db from '../db.js';
 export function authenticate(req, res, next){
     if(!req.cookies.accessToken){
         res.status(401).send("Not logged in");
+        return;
     }
 
     try{
