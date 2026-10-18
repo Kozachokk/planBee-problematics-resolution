@@ -39,7 +39,7 @@ authRouter.post('/login', (req, res) => {
 // TODO implement refresh token rotation
 authRouter.get('/refresh', (req, res) => {
     try{
-        const payload = jwt.verify(req.cookies.refreshToken, process.env.JWTSECRET);
+        const payload = jwt.verify(req.cookies.refreshToken, process.env.JWT_SECRET);
         if(!payload.userId){
             res.status(401).send("Not logged in");
             return;

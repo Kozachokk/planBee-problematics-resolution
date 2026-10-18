@@ -8,7 +8,7 @@ export function authenticate(req, res, next){
     }
 
     try{
-        const decoded = jwt.verify(req.cookies.accessToken, process.env.JWTSECRET, {complete: false});
+        const decoded = jwt.verify(req.cookies.accessToken, process.env.JWT_SECRET, {complete: false});
         req.userData = {
             userId: decoded.userId,
             username: decoded.username,
@@ -48,11 +48,11 @@ export function generateJWTokens(userId){
     const accessPayload = userData;
 
     //TODO do refresh token rotation
-    const refreshToken = jwt.sign(refreshPayload, process.env.JWTSECRET, {
+    const refreshToken = jwt.sign(refreshPayload, process.env.JWT_SECRET, {
         expiresIn: "7d"
     });
 
-    const accessToken = jwt.sign(accessPayload, process.env.JWTSECRET, {
+    const accessToken = jwt.sign(accessPayload, process.env.JWT_SECRET, {
         expiresIn: "1h"
     })
 
