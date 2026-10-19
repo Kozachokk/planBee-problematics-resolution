@@ -4,13 +4,18 @@ import Problem from "../components/Problem/Problem";
 import { UserContext } from "../contexts/UserContext";
 import type { IUserContext } from "../@types/UserContext";
 import { useFetchData } from "../hooks/useFetchData";
+import { useNavigate } from "react-router-dom";
 
 
 function Dashboard(){
     const [problems, setProblems] = useState<IProblem[]>();
     const { user, loginUser } = useContext(UserContext) as IUserContext
+    const navigate = useNavigate()
 
     useFetchData("/auth/user", loginUser)
+
+    console.log(!user)
+    if(!user) navigate("/login")
 
 
 

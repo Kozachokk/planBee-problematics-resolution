@@ -25,7 +25,6 @@ export function useFetchData(apiPath: string, callback: (data:any) => void){
             .catch(error => {
                 if(error == "Not logged in"){
                     refresh();
-                    getUserData();
                     return;
                 }
 
@@ -45,6 +44,7 @@ export function useFetchData(apiPath: string, callback: (data:any) => void){
                         return Promise.reject(await response.text())
                     }
 
+                    getUserData()
                     console.log(await response.text());
                 })
                 .catch(error => {
