@@ -12,12 +12,8 @@ function Dashboard(){
     const { user, loginUser } = useContext(UserContext) as IUserContext
     const navigate = useNavigate()
 
+    
     useFetchData("/auth/user", loginUser)
-
-    console.log(!user)
-    if(!user) navigate("/login")
-
-
 
     return(
       <main>
