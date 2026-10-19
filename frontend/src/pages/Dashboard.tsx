@@ -3,35 +3,15 @@ import type IProblem from "../components/Problem/IProblem"
 import Problem from "../components/Problem/Problem";
 import { UserContext } from "../contexts/UserContext";
 import type { IUserContext } from "../@types/UserContext";
+import { useFetchData } from "../hooks/useFetchData";
 
 
 function Dashboard(){
     const [problems, setProblems] = useState<IProblem[]>();
+    const { user, loginUser } = useContext(UserContext) as IUserContext
 
-    const { loginUser } = useContext(UserContext) as IUserContext
+    useFetchData("/auth/user", loginUser)
 
-    useEffect(() => {
-      const getUserData = () => {
-        const headers: RequestInit = {
-          method: "GET",
-          credentials: "include"
-        }
-
-        fetch(`${import.meta.env.VITE_BASE_API_URL}/auth/user`, headers)
-          .then(async response => {
-            const isJSON = response.headers.get("content-type")?.includes('application/json');
-            const data = isJSON && await response.json();
-
-            console.log(data);
-            loginUser(data);
-          })
-          .catch(error => {
-            console.error(error)
-          })
-      }
-
-      getUserData()
-    }, [])
 
 
     return(
