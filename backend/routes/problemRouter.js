@@ -1,7 +1,7 @@
 import express from 'express'
 import db from '../db.js'
 import { validateIdParam } from '../middleware/dataValidation.js';
-import { deleteSolution, getAllSolutionOnProblem } from './solutionRouter.js';
+import { createSolutionObject, deleteSolution, getAllSolutionOnProblem } from './solutionRouter.js';
 
 const problemRouter = express.Router();
 
@@ -24,7 +24,13 @@ problemRouter.param("id", validateIdParam)
 // get all problems
 problemRouter.get("/", (req, res) => {
     const problems = getAllProblems.all()
-    res.status(200).json(problems);
+    const problems_solutions = problems.map((problem) => ({
+        problemId: problem.problemId,
+        problem: problem.problem,
+        createdBy: problem.username,
+        solutions: getAllSolutionOnProblem.all(problem.problemId).map((solution) => createSolutionObject(solution)),
+    }))
+    res.status(200).json(problems_solutions);
 })
 
 // get specific post

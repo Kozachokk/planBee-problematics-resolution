@@ -6,7 +6,7 @@ const solutionRouter = express.Router();
 solutionRouter.param("id", validateIdParam)
 
 export const getAllSolutionOnProblem = db.prepare("SELECT solutionId, solution, proposedBy FROM solution WHERE problemId = ?;")
-const getSolution = db.prepare("SELECT solution, proposedBy FROM solution WHERE solutionId = ?;")
+const getSolution = db.prepare("SELECT solutionId, solution, proposedBy FROM solution WHERE solutionId = ?;")
 const getFeedbackOnSolution = db.prepare("SELECT username, opinion FROM solution_user INNER JOIN user ON solution_user.userId = user.userId WHERE solutionId = ?;")
 const addSolution = db.prepare("INSERT INTO solution(solution, proposedBy, problemId) VALUES ( ?, ?, ? );")
 const addReaction = db.prepare("INSERT INTO solution_user(solutionId, userId, opinion) VALUES ( ?, ?, ? );")
@@ -19,8 +19,7 @@ export const deleteSolution = db.transaction((solution) => {
     deleteSolutionFromSolution_UserTable.run(solution)
 })
 
-
-function createSolutionObject(solution){
+export function createSolutionObject(solution){
     // Get every reaction on the solution
     const solutionFeedback = getFeedbackOnSolution.all(solution.solutionId);
 
@@ -37,29 +36,10 @@ function createSolutionObject(solution){
         disapprovedBy: disapprovedBy
     }
 }
-// TODO TEST IT
-// Get all solutions of a problem
-solutionRouter.get("/", (req, res) => {
-    if(!req.query.problemId){
-        res.status(400).send("Please provide a problemId to which fetch the solutions to.");
-        return;
-    }
-    if(validateIntegerId(req.query.problemId)){
-        res.status(400).send("Invalid Id");
-        return;
-    }
-
-    // Gets all the proposed solution for a given problemId
-    const allProposedSolutions = getAllSolutionOnProblem.all(req.query.problemId)
-
-    // Constructs 
-    const problemFeedback = allProposedSolutions.map(solution => createSolutionObject(solution))
-    res.status(200).json(problemFeedback);
-})
 
 // Get specific solution
 solutionRouter.get("/:id", (req, res) => {
-    const solution = getSolution.get(req.params.id);
+    const solution = createSolutionObject(getSolution.get(req.params.id));
 
     if(!solution){
         res.status(400).send("Invalid Id");
