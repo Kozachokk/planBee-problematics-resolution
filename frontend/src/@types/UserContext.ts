@@ -7,5 +7,5 @@ export interface IUser{
 
 export interface IUserContext{
     user?: IUser,
-    loginUser: (user:IUser) => void
+    loginUser: (user?:IUser) => void
 }

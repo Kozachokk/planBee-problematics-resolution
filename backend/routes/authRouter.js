@@ -80,6 +80,20 @@ authRouter.get('/refresh', cors({origin: "http://localhost:5173", credentials:tr
     }
 })
 
+authRouter.get("/logout", (req, res) => {
+    res.clearCookie("refreshToken", {
+        httpOnly: true,
+        secure: true,
+        sameSite: "strict",
+    })
+    res.clearCookie("accessToken", {
+        httpOnly: true,
+        secure: true,
+        sameSite: "strict",
+    })
+    res.status(200).send("Logged out");
+})
+
 // Return user data
 authRouter.get("/user", authenticate, (req, res) => {
     res.status(200).json(req.userData);
