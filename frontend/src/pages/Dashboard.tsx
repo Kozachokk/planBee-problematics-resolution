@@ -4,23 +4,37 @@ import Problem from "../components/Problem/Problem";
 import { UserContext } from "../contexts/UserContext";
 import type { IUserContext } from "../@types/UserContext";
 import { useFetchData } from "../hooks/useFetchData";
-import { useNavigate } from "react-router-dom";
 
 
 function Dashboard(){
     const [problems, setProblems] = useState<IProblem[]>();
     const { user, loginUser } = useContext(UserContext) as IUserContext
-    const navigate = useNavigate()
 
-    
+    const parseProblemsData = (data:any) => {
+      setProblems(data.map((el: any) => (
+        {
+          problemId: el.problemId,
+          problemPrompt: el.problem,
+          createdBy: el.username,
+          solutions: []
+        }
+      )))
+
+      console.log(problems)
+    }
+
     useFetchData("/auth/user", loginUser)
+    useFetchData("/problem", parseProblemsData)
+
 
     return(
       <main>
         {problems?.map(problem => <Problem 
+          key={problem.problemId}
           problemId={problem.problemId}
           problemPrompt={problem.problemPrompt}
           solutions={problem.solutions}
+          createdBy={problem.createdBy}
         />)}
       </main>
     )

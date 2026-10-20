@@ -3,7 +3,6 @@ import { useNavigate } from "react-router-dom";
 
 export function useFetchData(apiPath: string, callback: (data:any) => void){
     const navigate = useNavigate();
-    let refreshed = false;
 
     useEffect(() => {
         const getUserData = () => {
@@ -34,7 +33,6 @@ export function useFetchData(apiPath: string, callback: (data:any) => void){
         }
 
         const refresh = () => {
-            refreshed = true;
             const headers: RequestInit = {
             method: "GET",
             credentials: "include"
@@ -50,7 +48,7 @@ export function useFetchData(apiPath: string, callback: (data:any) => void){
                     console.log(await response.text());
                 })
                 .catch(error => {
-                    console.error("Refresh didn't work")
+                    console.error("Refresh didn't work: " + error)
                     navigate("/login");
                 })
         }

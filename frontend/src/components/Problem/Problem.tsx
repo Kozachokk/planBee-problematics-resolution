@@ -1,4 +1,4 @@
-import type { IProblem } from "./IProblem";
+import type IProblem from "./IProblem";
 import Solution from "../Solution/Solution";
 import './problem.css'
 
@@ -8,7 +8,8 @@ function Problem(props: IProblem){
     const data:IProblem = {
         problemId: props.problemId,
         problemPrompt: props.problemPrompt,
-        solutions: props.solutions
+        solutions: props.solutions,
+        createdBy: props.createdBy
     }
 
     const submitSolution = () => {
@@ -17,8 +18,8 @@ function Problem(props: IProblem){
 
     return(
         <article className="problem">
-            <h2>Problematic: <span className="subtitle">{props.problemPrompt}</span></h2>
-            {props.solutions.map(solution => <Solution 
+            <h2>Problematic: <span className="subtitle">{data.problemPrompt}</span><br/>Added by: {data.createdBy}</h2>
+            {data.solutions.map(solution => <Solution 
                 solutionId={solution.solutionId}
                 solutionPrompt={solution.solutionPrompt}
                 approvedBy={solution.approvedBy}
