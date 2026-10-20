@@ -1,9 +1,9 @@
-import { useContext, useEffect, useState } from "react"
+import { useContext, useState } from "react"
 import type IProblem from "../components/Problem/IProblem"
 import Problem from "../components/Problem/Problem";
 import { UserContext } from "../contexts/UserContext";
 import type { IUserContext } from "../@types/UserContext";
-import { useFetchData } from "../hooks/useFetchData";
+import { useFetchData } from "../hooks/FetchAPI";
 
 
 function Dashboard(){

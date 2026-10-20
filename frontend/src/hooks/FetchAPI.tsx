@@ -11,7 +11,7 @@ export function useFetchData(apiPath: string, callback: (data:any) => void){
             credentials: "include"
             }
 
-            fetch(`http://localhost:3000${apiPath}`, headers)
+            fetch(`${import.meta.env.VITE_BASE_API_URL}${apiPath}`, headers)
             .then(async response => {
                 const isJSON = response.headers.get("content-type")?.includes('application/json');
                 const data = isJSON && await response.json();
@@ -37,8 +37,7 @@ export function useFetchData(apiPath: string, callback: (data:any) => void){
             method: "GET",
             credentials: "include"
             }
-            console.log("refresh")
-            fetch(`http://localhost:3000/auth/refresh`, headers)
+            fetch(`${import.meta.env.VITE_BASE_API_URL}/auth/refresh`, headers)
                 .then(async response => {
                     if(!response.ok){
                         return Promise.reject(await response.text())

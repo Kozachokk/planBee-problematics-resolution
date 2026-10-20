@@ -56,7 +56,7 @@ solutionRouter.post("/add", (req, res) => {
         return;
     }
 
-    const info = addSolution.run(req.body.solution, req.userData.username, req.body.problemId)
+    const info = addSolution.run(req.body.solution, req.userData.userId, req.body.problemId)
 
     return {
         solutionId: info.lastInsertRowid,
