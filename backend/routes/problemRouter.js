@@ -1,7 +1,7 @@
 import express from 'express'
 import db from '../db.js'
 import { validateIdParam } from '../middleware/dataValidation.js';
-import { createSolutionObject, deleteSolution, getAllSolutionOnProblem } from './solutionRouter.js';
+import { createSolutionObject, deleteSolution, getAllSolutionOnProblem, getSolution } from './solutionRouter.js';
 
 const problemRouter = express.Router();
 
@@ -36,6 +36,7 @@ problemRouter.get("/", (req, res) => {
 // get specific post
 problemRouter.get("/:id", (req, res) => {
     const problem = getSpecificProblem.get(req.params.id);
+    problem.solutions = createSolutionObject(getSolution.get(problem.problemId))
 
     // If the queried problem couldn't be fetched
     if(!problem){

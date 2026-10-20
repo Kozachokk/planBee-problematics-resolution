@@ -6,7 +6,7 @@ const solutionRouter = express.Router();
 solutionRouter.param("id", validateIdParam)
 
 export const getAllSolutionOnProblem = db.prepare("SELECT solutionId, solution, username FROM solution INNER JOIN user ON solution.proposedBy = user.userId WHERE problemId = ?;")
-const getSolution = db.prepare("SELECT solutionId, solution, username FROM solution INNER JOIN user ON solution.proposedBy = user.userId WHERE solutionId = ?;")
+export const getSolution = db.prepare("SELECT solutionId, solution, username FROM solution INNER JOIN user ON solution.proposedBy = user.userId WHERE solutionId = ?;")
 const getFeedbackOnSolution = db.prepare("SELECT username, opinion FROM solution_user INNER JOIN user ON solution_user.userId = user.userId WHERE solutionId = ?;")
 const addSolution = db.prepare("INSERT INTO solution(solution, proposedBy, problemId) VALUES ( ?, ?, ? );")
 const addReaction = db.prepare("INSERT INTO solution_user(solutionId, userId, opinion) VALUES ( ?, ?, ? );")
