@@ -60,13 +60,7 @@ solutionRouter.post("/add", (req, res) => {
 
     const info = addSolution.run(req.body.solution, req.userData.userId, req.body.problemId)
 
-    return {
-        solutionId: info.lastInsertRowid,
-        proposedBy: req.userData.username,
-        solution: req.body.solution,
-        approvedBy: [],
-        disapprovedBy: []
-    }
+    res.status(200).json({solutionId: info.lastInsertRowid})
 })
 
 // Delete solution
@@ -91,14 +85,11 @@ solutionRouter.delete("/:id", (req, res) => {
 // React to solution
 solutionRouter.post("/reaction", (req, res) => {
     if(!req.body.solutionId || !req.body.reaction){
-        console.log("or here?")
         res.status(400).send("Please do provide a solutionId and a reaction");
         return;
     }
 
     if(isIdValid(req.body.solutionId) || ![-1, 0, 1].includes(req.body.reaction)){
-        console.log(req.body)
-        console.log(isIdValid(req.body.solutionId))
         res.status(400).send("Please do provide a valid solutionId and/or reaction");
         return;
     }

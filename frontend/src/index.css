@@ -5,7 +5,7 @@
     --color-primary: hsl(0,0%,0%);
     --color-muted: hsl(0,0%, 30%);
     --color-error: rgb(236, 106, 106);
-    --color-highlight: hsl(232, 49.1%, 28.8%);
+    --color-highlight: hsl(232, 100%, 85%);
 }
 
 body{
@@ -17,6 +17,10 @@ body{
     min-height: 100vh;
     text-align: center;
     padding: 15vh 0;
+}
+
+button {
+    cursor: pointer;
 }
 
 * {

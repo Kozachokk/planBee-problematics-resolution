@@ -1,6 +1,9 @@
 import { useNavigate } from "react-router-dom";
 import type ISolution from "./ISolution";
 import './solution.css'
+import { useContext } from "react";
+import { UserContext } from "../../contexts/UserContext";
+import type { IUserContext } from "../../@types/UserContext";
 
 function Solution(props: ISolution){
     const data: ISolution = {
@@ -12,6 +15,7 @@ function Solution(props: ISolution){
     }
 
     const navigate = useNavigate()
+    const { user } = useContext(UserContext) as IUserContext;
 
     const postReaction = (body: string) => {
         const post = () => {
@@ -82,8 +86,8 @@ function Solution(props: ISolution){
             <h3>Proposed Solution: <span className="subtitle">{data.solution}</span></h3>
             <div className="details">
                 <div className="feedback">
-                    <button onClick={approve}>✅ {data.approvedBy.length}</button>
-                    <button onClick={disapprove}>❌ {data.disapprovedBy.length}</button>
+                    <button onClick={approve} className={data.approvedBy.some((name) => name === user?.username) ? "highlighted" : ""}>✅ {data.approvedBy.length}</button>
+                    <button onClick={disapprove} className={data.disapprovedBy.some((name) => name === user?.username) ? "highlighted" : ""}>❌ {data.disapprovedBy.length}</button>
                 </div>   
                 <p>Proposed by: {data.proposedBy}</p>
             </div>

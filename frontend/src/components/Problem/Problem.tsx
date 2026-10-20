@@ -1,37 +1,59 @@
-import type IProblem from "./IProblem";
 import Solution from "../Solution/Solution";
 import './problem.css'
 import { useNavigate } from "react-router-dom";
+import type IProblem from "./IProblem";
+import type ISolution from "../Solution/ISolution";
+import { useContext, useState } from "react";
+import { UserContext } from "../../contexts/UserContext";
+import type { IUserContext } from "../../@types/UserContext";
 
 
 function Problem(props: IProblem){
+    const [solutions, setSolutions] = useState<ISolution[]>(props.solutions);
     const navigate = useNavigate()
+    const {user} = useContext(UserContext) as IUserContext;
 
-    const data:IProblem = {
-        problemId: props.problemId,
-        problemPrompt: props.problemPrompt,
-        solutions: props.solutions,
-        createdBy: props.createdBy
+    const addSolution = (solution: ISolution) => {
+        solutions.push(solution);
+        setSolutions(solutions);
     }
 
-    const postSolution = (body: string) => {
+    const setSolutionId = (solution: ISolution, solutionId: number) => {
+      const updated: ISolution[] = solutions.map((sol) => {
+        if(sol === solution){
+            sol.solutionId = solutionId;
+        }
+        return sol;
+      })
+
+      setSolutions(updated);
+    }
+
+    const postSolution = (solution: ISolution) => {
+        addSolution(solution)
+
         const post = () => {
             const headers: RequestInit = {
-            method: "POST",
-            credentials: "include",
-            headers: { 'Content-Type': 'application/json' },
-            body: body
+                method: "POST",
+                credentials: "include",
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({problemId: props.problemId, solution: solution.solution})
             }
 
             fetch(`${import.meta.env.VITE_BASE_API_URL}/solution/add`, headers)
             .then(async response => {
                 if(!response.ok){
-                    return Promise.reject(await response.text())
+                    return Promise.reject(response.status)
                 }
+
+                const isJSON = response.headers.get('content-type')?.includes('application/json');
+                const responseJson = isJSON && await response.json();
+
+                setSolutionId(solution, responseJson.solutionId)
             })
             .catch(error => {
                 console.error(error);
-                if(error == "Not logged in"){
+                if(error === 401){
                     refresh();
                 }
             })
@@ -62,20 +84,23 @@ function Problem(props: IProblem){
 
     const submitSolution = (e: React.SubmitEvent<HTMLFormElement>) => {
         e.preventDefault()
-        const body = {
-            problemId: data.problemId,
-            solution: (e.target.elements.namedItem("input-solution") as HTMLInputElement).value
+        const solution: ISolution = {
+            solution: (e.target.elements.namedItem("input-solution") as HTMLInputElement).value,
+            solutionId: 2,
+            approvedBy: [],
+            disapprovedBy: [],
+            proposedBy: user!.username
         }
 
-        postSolution(JSON.stringify(body))
+        postSolution(solution)
     }
 
-    console.log(data.solutions)
+    console.log(props.solutions)
 
     return(
         <article className="problem">
-            <h2>{data.createdBy}: <span className="subtitle">{data.problemPrompt}</span></h2>
-            {data.solutions.map(solution => <Solution
+            <h2>{props.createdBy}: <span className="subtitle">{props.problemPrompt}</span></h2>
+            {solutions.map(solution => <Solution
                 key={solution.solutionId}
                 solutionId={solution.solutionId}
                 solution={solution.solution}

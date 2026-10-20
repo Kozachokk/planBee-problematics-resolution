@@ -28,6 +28,13 @@
         justify-content: space-between;
         padding: 0 10px;
     }
+
+    .highlighted{
+        border: 2px solid var(--color-highlight)
+    }
+    .highlighted:hover{
+        border: 2px solid var(--color-bg-light)
+    }
 }
 
 
