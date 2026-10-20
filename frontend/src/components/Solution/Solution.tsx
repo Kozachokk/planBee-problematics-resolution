@@ -78,11 +78,14 @@ function Solution(props: ISolution){
     }
 
     return(
-        <article>
-            <h3>Proposed Solution: <span className="subtitle">{data.solution}</span><br/>Proposed by: {data.proposedBy}</h3>
-            <div className="feedback">
-                <button onClick={approve}>✅ {data.approvedBy.length}</button>
-                <button onClick={disapprove}>❌ {data.disapprovedBy.length}</button>
+        <article className="solution">
+            <h3>Proposed Solution: <span className="subtitle">{data.solution}</span></h3>
+            <div className="details">
+                <div className="feedback">
+                    <button onClick={approve}>✅ {data.approvedBy.length}</button>
+                    <button onClick={disapprove}>❌ {data.disapprovedBy.length}</button>
+                </div>   
+                <p>Proposed by: {data.proposedBy}</p>
             </div>
         </article>
     )

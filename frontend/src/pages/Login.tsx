@@ -1,23 +1,41 @@
-import { useState } from 'react';
+import { useState, useEffect, useContext } from 'react';
 import './login.css';
 import { useNavigate } from 'react-router-dom';
+import { UserContext } from '../contexts/UserContext';
+import type { IUserContext } from '../@types/UserContext';
 
 function Login(){
 
     const [error, setError] = useState("");
+    const [username, setUsername] = useState("");
+    const [password, setPassword] = useState("");
+    const { user } = useContext(UserContext) as IUserContext;
+
     const navigate = useNavigate()
 
-    const login = (e: React.SubmitEvent<HTMLFormElement>) => {
-        e.preventDefault();
-        
-        // Get cookies from the server
+    if(user) navigate("/")
+
+    useEffect(() => {
+    const listener = (e: KeyboardEvent) => {
+        if (e.code === "Enter" || e.code === "NumpadEnter") {
+            e.preventDefault();
+            login()
+        }
+    };
+    document.addEventListener("keydown", listener);
+    return () => {
+        document.removeEventListener("keydown", listener);
+    };
+  }, []);
+
+    const login = () => {
         const requestOption:RequestInit = {
             method: "POST",
             headers: { 'Content-Type': 'application/json' },
             credentials: "include",
             body: JSON.stringify({
-                username: (e.target.elements.namedItem("username") as HTMLInputElement).value,
-                password: (e.target.elements.namedItem("password") as HTMLInputElement).value
+                username: username,
+                password: password,
             })
         }
 
@@ -36,16 +54,21 @@ function Login(){
         )
     }
 
+    const submitForm = (e: React.SubmitEvent<HTMLFormElement>) => {
+        e.preventDefault();
+        login();
+    }
+
     return(
         <div className="formBox">
-            <form onSubmit={login}>
+            <form onSubmit={submitForm}>
                 <label htmlFor="username">username</label>
-                <input type="text" id="username" name='username'></input>
+                <input type="text" id="username" name='username' value={username} onChange={(e) => {setUsername(e.target.value)}}></input>
                 <label htmlFor="password">password</label>
-                <input type="text" id="password" name='password'></input>
+                <input type="password" id="password" name='password' value={password} onChange={(e) => {setPassword(e.target.value)}}></input>
                 <button type="submit">Login</button>
             </form>
-            {error && <p>{error}</p>}
+            {error && <p className='error'>Error: {error}</p>}
         </div>
     )
 }

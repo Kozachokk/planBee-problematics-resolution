@@ -74,7 +74,7 @@ function Problem(props: IProblem){
 
     return(
         <article className="problem">
-            <h2>Problematic: <span className="subtitle">{data.problemPrompt}</span><br/>Added by: {data.createdBy}</h2>
+            <h2>{data.createdBy}: <span className="subtitle">{data.problemPrompt}</span></h2>
             {data.solutions.map(solution => <Solution
                 key={solution.solutionId}
                 solutionId={solution.solutionId}
@@ -84,7 +84,7 @@ function Problem(props: IProblem){
                 proposedBy={solution.proposedBy}
             />)}
         <form onSubmit={submitSolution}>
-            <input className='input-solution' name="input-solution" type='text' placeholder="Add Solutions?"></input>
+            <textarea className='input-solution' name="input-solution" placeholder="Add Solutions?"></textarea>
             <button className='submit-solution'>Add Solution</button>
         </form>
         </article>

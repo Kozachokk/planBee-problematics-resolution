@@ -1,14 +1,12 @@
-import { useContext, useState } from "react"
+import { useState } from "react"
 import type IProblem from "../components/Problem/IProblem"
 import Problem from "../components/Problem/Problem";
-import { UserContext } from "../contexts/UserContext";
-import type { IUserContext } from "../@types/UserContext";
 import { useFetchData } from "../hooks/FetchAPI";
 
 
 function Dashboard(){
     const [problems, setProblems] = useState<IProblem[]>();
-    const { loginUser } = useContext(UserContext) as IUserContext
+
 
     const parseProblemsData = (data:any) => {
       const problems = data.map((el: any) => (
@@ -22,7 +20,6 @@ function Dashboard(){
       setProblems(problems)
     }
 
-    useFetchData("/auth/user", loginUser)
     useFetchData("/problem", parseProblemsData)
 
 

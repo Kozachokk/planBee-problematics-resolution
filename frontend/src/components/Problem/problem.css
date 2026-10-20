@@ -1,13 +1,14 @@
 .problem{
-    border: 2px solid var(--bg2-color);
     min-height: 10vh;
     max-width: 65vw;
     padding: 10px;
     border-radius: 15px;
     box-shadow: rgba(0, 0, 0, 0.19) 0px 10px 20px, rgba(0, 0, 0, 0.23) 0px 6px 6px;
+    background-color: var(--color-bg);
 
     h2{
         margin: 0 5px 10px 0;
+        color: var(--color-primary);
     }
 
     .subtitle{
@@ -17,9 +18,19 @@
 
     .input-solution{
         width: 80%;
+        background-color: var(--color-bg);
+        color: var(--color-primary);
+        border: 2px solid var(--color-bg-light);
+        border-radius: 10px;
+        padding-left: 10px;
     }
     .submit-solution{
         width:20%;
+        left:5%;
+        background-color: var(--color-bg);
+        color: var(--color-primary);
+        border: 2px solid var(--color-bg-light);
+        border-radius: 10px;
     }
 }
 

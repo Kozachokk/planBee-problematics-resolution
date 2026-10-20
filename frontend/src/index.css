@@ -1,18 +1,22 @@
-:root{
-    --alabaster-grey: #DBDBDBff;
-    --deep-walnut: #3F2C00ff;
-    --deep-walnut-2: #382700ff;
-    --dark-goldenrod: #A17B15ff;
-    --vanilla-custard: #E7DAA2ff;
+:root {
+    --color-bg-dark: hsl(0,0%,85%);
+    --color-bg: hsl(0,0%,90%);
+    --color-bg-light: hsl(0,0%,95%);
+    --color-primary: hsl(0,0%,0%);
+    --color-muted: hsl(0,0%, 30%);
+    --color-error: rgb(236, 106, 106);
+    --color-highlight: hsl(232, 49.1%, 28.8%);
 }
 
 body{
-    background-color: var(--deep-walnut);
-    color: var(--vanilla-custard);
+    background-color: var(--color-bg-light);
+    color: var(--color-muted);
     display: flex;
     justify-content: center;
     align-items: center;
-    height: 100vh;
+    min-height: 100vh;
+    text-align: center;
+    padding: 15vh 0;
 }
 
 * {
