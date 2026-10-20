@@ -5,7 +5,7 @@ import type { IUserContext } from '../../@types/UserContext';
 import { useNavigate } from 'react-router-dom';
 
 function Header(){
-    const { user, loginUser } = useContext(UserContext) as IUserContext;
+    const { user, clearUser } = useContext(UserContext) as IUserContext;
 
     const navigate = useNavigate()
 
@@ -16,7 +16,7 @@ function Header(){
         }
         fetch(`${import.meta.env.VITE_BASE_API_URL}/auth/logout`, headers)
 
-        loginUser(undefined)
+        clearUser()
 
         navigate("/login");
     }

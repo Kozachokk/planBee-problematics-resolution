@@ -14,8 +14,12 @@ function UserContextProvider({children}: IProps){
         setUser(user)
     }
 
+    const clearUser = () => {
+        setUser(undefined)
+    }
+
     return (
-        <UserContext.Provider value={{user, loginUser}}>
+        <UserContext.Provider value={{user, loginUser, clearUser}}>
             {children}
         </UserContext.Provider>
     )
