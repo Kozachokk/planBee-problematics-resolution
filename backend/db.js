@@ -27,7 +27,7 @@ const createSolutionUserFeedbackBridgingTable = db.prepare(`CREATE TABLE IF NOT 
 solutionId INTEGER REFERENCES solution(solutionId),
 userId INTEGER REFERENCES user(userId),
 opinion INTEGER NOT NULL DEFAULT 0 CHECK (opinion IN (-1, 0, 1)),
-PRIMARY KEY (solutionId, opinion));`
+PRIMARY KEY (solutionId, userId));`
 );
 
 createUserTable.run();

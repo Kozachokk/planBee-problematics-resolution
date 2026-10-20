@@ -1,6 +1,6 @@
 import express from 'express'
 import db from '../db.js'
-import { validateIdParam, validateIntegerId } from '../middleware/dataValidation.js';
+import { validateIdParam, isIdValid } from '../middleware/dataValidation.js';
 
 const solutionRouter = express.Router();
 solutionRouter.param("id", validateIdParam)
@@ -10,6 +10,8 @@ export const getSolution = db.prepare("SELECT solutionId, solution, username FRO
 const getFeedbackOnSolution = db.prepare("SELECT username, opinion FROM solution_user INNER JOIN user ON solution_user.userId = user.userId WHERE solutionId = ?;")
 const addSolution = db.prepare("INSERT INTO solution(solution, proposedBy, problemId) VALUES ( ?, ?, ? );")
 const addReaction = db.prepare("INSERT INTO solution_user(solutionId, userId, opinion) VALUES ( ?, ?, ? );")
+const getReaction = db.prepare("SELECT * FROM solution_user WHERE solutionId = ? AND userId = ?;")
+const setReaction =db.prepare("UPDATE solution_user SET opinion = ? WHERE solutionId = ? AND userId = ?;")
 
 export const deleteSolution = db.transaction((solution) => {
     const deleteSolutionFromSolution_UserTable = db.prepare("DELETE FROM solution_user WHERE solutionId = ?;")
@@ -89,18 +91,27 @@ solutionRouter.delete("/:id", (req, res) => {
 // React to solution
 solutionRouter.post("/reaction", (req, res) => {
     if(!req.body.solutionId || !req.body.reaction){
+        console.log("or here?")
         res.status(400).send("Please do provide a solutionId and a reaction");
         return;
     }
 
-    if(validateIdParam(req.body.solutionId) || [-1, 0, 1].includes(req.body.reaction)){
+    if(isIdValid(req.body.solutionId) || ![-1, 0, 1].includes(req.body.reaction)){
+        console.log(req.body)
+        console.log(isIdValid(req.body.solutionId))
         res.status(400).send("Please do provide a valid solutionId and/or reaction");
         return;
     }
 
     try{
-        addReaction.run(req.body.solutionId, req.userData.userId, req.body.reaction);
-        res.send(200).send("Successfully reacted!");
+        const reaction = getReaction.get(req.body.solutionId, req.userData.userId)
+        if(reaction){
+            setReaction.run(req.body.reaction, req.body.solutionId, req.userData.userId)
+        }
+        else{
+            addReaction.run(req.body.solutionId, req.userData.userId, req.body.reaction);
+        }
+        res.status(200).send("Successfully reacted!");
     }catch(err){
         console.log(err);
         res.status(500).send("Server Error");
