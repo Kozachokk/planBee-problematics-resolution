@@ -23,7 +23,7 @@ function Header(){
 
     return (
         <header>
-            <p>Name: {user?.username}</p>
+            <h2>Logged In As: <span>{user?.username}</span></h2>
             <button onClick={logout}>Logout</button>
         </header>
     )

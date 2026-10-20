@@ -5,4 +5,20 @@ header{
     width: 100vw;
     display: flex;
     justify-content: space-between;
+    padding: 10px 20px;
+
+    h2{
+        font-weight: normal;
+        span{
+            font-weight: bold;
+        }
+    }
+
+    button {
+        background-color: var(--deep-walnut);
+        box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
+        color: var(--alabaster-grey);
+        border: 2px solid var(--deep-walnut-2);
+        font-size: 1.5rem
+    }
 }

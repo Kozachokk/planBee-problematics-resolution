@@ -1,14 +1,14 @@
 :root{
-    --bg1-color: #0d404e;
-    --bg2-color: #155263;
-    --bg3-color: #ff6f3c;
-    --fg1-color: #ffa639;
-    --fg2-color: #ffc93c;
+    --alabaster-grey: #DBDBDBff;
+    --deep-walnut: #3F2C00ff;
+    --deep-walnut-2: #382700ff;
+    --dark-goldenrod: #A17B15ff;
+    --vanilla-custard: #E7DAA2ff;
 }
 
 body{
-    background-color: var(--bg1-color);
-    color: var(--fg1-color);
+    background-color: var(--deep-walnut);
+    color: var(--vanilla-custard);
     display: flex;
     justify-content: center;
     align-items: center;
