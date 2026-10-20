@@ -1,6 +1,7 @@
 export default interface ISolution {
     solutionId: number,
-    solutionPrompt: string,
+    solution: string,
     approvedBy: string[],
-    disprovedBy: string[],
+    disapprovedBy: string[],
+    proposedBy: string,
 }

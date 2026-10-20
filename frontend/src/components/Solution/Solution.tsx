@@ -1,4 +1,4 @@
-import type { ISolution } from "./ISolution";
+import type ISolution from "./ISolution";
 import './solution.css'
 
 function Solution(props: ISolution){
@@ -13,10 +13,10 @@ function Solution(props: ISolution){
 
     return(
         <article>
-            <h3>Proposed Solution: <span className="subtitle">{props.solutionPrompt}</span></h3>
+            <h3>Proposed Solution: <span className="subtitle">{props.solution}</span><br/>Proposed by: {props.proposedBy}</h3>
             <div className="feedback">
                 <button onClick={approve}>✅ {props.approvedBy.length}</button>
-                <button onClick={disapprove}>❌ {props.disprovedBy.length}</button>
+                <button onClick={disapprove}>❌ {props.disapprovedBy.length}</button>
             </div>
         </article>
     )

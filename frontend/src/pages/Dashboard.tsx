@@ -8,19 +8,18 @@ import { useFetchData } from "../hooks/useFetchData";
 
 function Dashboard(){
     const [problems, setProblems] = useState<IProblem[]>();
-    const { user, loginUser } = useContext(UserContext) as IUserContext
+    const { loginUser } = useContext(UserContext) as IUserContext
 
     const parseProblemsData = (data:any) => {
-      setProblems(data.map((el: any) => (
+      const problems = data.map((el: any) => (
         {
           problemId: el.problemId,
           problemPrompt: el.problem,
-          createdBy: el.username,
-          solutions: []
+          createdBy: el.createdBy,
+          solutions: el.solutions
         }
-      )))
-
-      console.log(problems)
+      ))
+      setProblems(problems)
     }
 
     useFetchData("/auth/user", loginUser)

@@ -16,14 +16,18 @@ function Problem(props: IProblem){
         //
     }
 
+    console.log(data.solutions)
+
     return(
         <article className="problem">
             <h2>Problematic: <span className="subtitle">{data.problemPrompt}</span><br/>Added by: {data.createdBy}</h2>
-            {data.solutions.map(solution => <Solution 
+            {data.solutions.map(solution => <Solution
+                key={solution.solutionId}
                 solutionId={solution.solutionId}
-                solutionPrompt={solution.solutionPrompt}
+                solution={solution.solution}
                 approvedBy={solution.approvedBy}
-                disprovedBy={solution.disprovedBy}
+                disapprovedBy={solution.disapprovedBy}
+                proposedBy={solution.proposedBy}
             />)}
         <form onSubmit={submitSolution}>
             <input className='input-solution' type='text' placeholder="Add Solutions?"></input>
