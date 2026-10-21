@@ -17,8 +17,8 @@ export const deleteSolution = db.transaction((solution) => {
     const deleteSolutionFromSolution_UserTable = db.prepare("DELETE FROM solution_user WHERE solutionId = ?;")
     const deleteSolutionFromTable = db.prepare("DELETE FROM solution WHERE solutionId = ?;")
 
-    deleteSolutionFromTable.run(solution)
     deleteSolutionFromSolution_UserTable.run(solution)
+    deleteSolutionFromTable.run(solution)
 })
 
 export function createSolutionObject(solution){
