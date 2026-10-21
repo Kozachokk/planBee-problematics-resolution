@@ -1,5 +1,5 @@
 .solution{
-    margin-bottom: 10px;
+    margin-bottom: 25px;
     text-align: left;
 
     button{
@@ -36,6 +36,5 @@
         border: 2px solid var(--color-bg-light)
     }
 }
-
 
 
