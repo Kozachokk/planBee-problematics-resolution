@@ -86,7 +86,7 @@ function Problem(props: IProblem){
         e.preventDefault()
         const solution: ISolution = {
             solution: (e.target.elements.namedItem("input-solution") as HTMLInputElement).value,
-            solutionId: 2,
+            solutionId: Date.now(),
             approvedBy: [],
             disapprovedBy: [],
             proposedBy: user!.username
