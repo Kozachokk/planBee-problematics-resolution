@@ -95,8 +95,6 @@ function Problem(props: IProblem){
         postSolution(solution)
     }
 
-    console.log(props.solutions)
-
     return(
         <article className="problem">
             <h2>{props.createdBy}: <span className="subtitle">{props.problemPrompt}</span></h2>
@@ -110,7 +108,7 @@ function Problem(props: IProblem){
             />)}
         <form onSubmit={submitSolution}>
             <textarea className='input-solution' name="input-solution" placeholder="Add Solutions?"></textarea>
-            <button className='submit-solution'>Add Solution</button>
+            <button className='submit-solution' type='submit'>Add Solution</button>
         </form>
         </article>
     );

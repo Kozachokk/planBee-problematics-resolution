@@ -94,8 +94,6 @@ function Solution(props: ISolution){
         postReaction(JSON.stringify(body));
     }
 
-    console.log("rerender")
-
     return(
         <article className="solution">
             <h3>Proposed Solution: <span className="subtitle">{props.solution}</span></h3>

@@ -11,7 +11,13 @@ function UserContextProvider({children}: IProps){
     const [user, setUser] = useState<IUser>()
 
     const loginUser = (user: IUser) => {
-        setUser(user)
+        const loggedInUser:IUser = {
+            userId: user.userId,
+            username: user.username,
+            isAdmin: !!user.isAdmin,
+            canCreateProblems: !!user.canCreateProblems,
+        }
+        setUser(loggedInUser)
     }
 
     const clearUser = () => {
