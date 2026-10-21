@@ -64,7 +64,15 @@ function Solution(props: ISolution){
             reaction: 1,
         }
 
-        if(approvedBy.includes(user!.username)) return;
+        // should unreact
+        if(approvedBy.includes(user!.username)){
+            body.reaction = 0;
+            const index = approvedBy.indexOf(user!.username);
+            if(index > -1) approvedBy.splice(index, 1);
+            setApprovedBy([...approvedBy])
+            postReaction(JSON.stringify(body));
+            return;
+        }
 
         approvedBy.push(user!.username);
         const index = disapprovedBy.indexOf(user!.username);
@@ -82,7 +90,14 @@ function Solution(props: ISolution){
             reaction: -1,
         }
 
-        if(disapprovedBy.includes(user!.username)) return;
+        if(disapprovedBy.includes(user!.username)){
+            body.reaction = 0;
+            const index = disapprovedBy.indexOf(user!.username);
+            if(index > -1) disapprovedBy.splice(index, 1);
+            setApprovedBy([...disapprovedBy])
+            postReaction(JSON.stringify(body));
+            return;
+        }
 
         disapprovedBy.push(user!.username);
         const index = approvedBy.indexOf(user!.username);
@@ -93,13 +108,20 @@ function Solution(props: ISolution){
         postReaction(JSON.stringify(body));
     }
 
+    const deleteSolution = () => {
+        console.log('delete solution')
+    }
+    
     return(
         <article className="solution">
-            <h3>Proposed Solution: <span className="subtitle">{props.solution}</span></h3>
+            <section>
+                <h3>Proposed Solution: <span className="subtitle">{props.solution}</span></h3>
+                {(user?.isAdmin || props.proposedBy === user?.username) && <button onClick={deleteSolution}>delete</button>}
+            </section>
             <div className="details">
                 <div className="feedback">
-                    <button onClick={approve} className={approvedBy.some((name) => name === user?.username) ? "highlighted" : ""}>✅ {approvedBy.length}</button>
-                    <button onClick={disapprove} className={disapprovedBy.some((name) => name === user?.username) ? "highlighted" : ""}>❌ {disapprovedBy.length}</button>
+                    <button onClick={approve} className={"reaction " + (approvedBy.some((name) => name === user?.username) ? "highlighted" : "")}>✅ {approvedBy.length}</button>
+                    <button onClick={disapprove} className={"reaction " + (disapprovedBy.some((name) => name === user?.username) ? "highlighted" : "")}>❌ {disapprovedBy.length}</button>
                 </div>   
                 <p>Proposed by: {props.proposedBy}</p>
             </div>

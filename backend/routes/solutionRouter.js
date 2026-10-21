@@ -84,11 +84,6 @@ solutionRouter.delete("/:id", (req, res) => {
 
 // React to solution
 solutionRouter.post("/reaction", (req, res) => {
-    if(!req.body.solutionId || !req.body.reaction){
-        res.status(400).send("Please do provide a solutionId and a reaction");
-        return;
-    }
-
     if(isIdValid(req.body.solutionId) || ![-1, 0, 1].includes(req.body.reaction)){
         res.status(400).send("Please do provide a valid solutionId and/or reaction");
         return;
