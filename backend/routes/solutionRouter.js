@@ -67,7 +67,7 @@ solutionRouter.post("/add", (req, res) => {
 solutionRouter.delete("/:id", (req, res) => {
     const solution = getSolution.get(req.params.id)
 
-    if(!req.userData.isAdmin || solution.proposedBy != req.userData.username){
+    if(!req.userData.isAdmin && solution.username != req.userData.username){
         res.status(403).send("Cannot delete");
         return;
     }

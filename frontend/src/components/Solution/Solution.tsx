@@ -1,11 +1,11 @@
 import { useNavigate } from "react-router-dom";
-import type ISolution from "./ISolution";
 import './solution.css'
 import { useContext, useState } from "react";
 import { UserContext } from "../../contexts/UserContext";
 import type { IUserContext } from "../../@types/UserContext";
+import type { ISolutionComponent } from "./ISolution";
 
-function Solution(props: ISolution){
+function Solution(props: ISolutionComponent){
     const [approvedBy, setApprovedBy] = useState<string[]>(props.approvedBy)
     const [disapprovedBy, setDisapprovedBy] = useState<string[]>(props.disapprovedBy)
 
@@ -109,7 +109,48 @@ function Solution(props: ISolution){
     }
 
     const deleteSolution = () => {
-        console.log('delete solution')
+        const deleteSolutionReq = () => {
+            const headers: RequestInit = {
+                method: "DELETE",
+                credentials: "include"
+            }
+
+            fetch(`${import.meta.env.VITE_BASE_API_URL}/solution/${props.solutionId}`, headers)
+            .then(async response => {
+                if(!response.ok){
+                    return Promise.reject(response.status)
+                }
+                props.deleteSolution(props.solutionId)
+            })
+            .catch(error => {
+                console.error(error);
+                if(error === 401){
+                    refresh();
+                }
+            })
+        }
+
+        const refresh = () => {
+            const headers: RequestInit = {
+            method: "GET",
+            credentials: "include"
+            }
+            fetch(`${import.meta.env.VITE_BASE_API_URL}/auth/refresh`, headers)
+                .then(async response => {
+                    if(!response.ok){
+                        return Promise.reject(await response.text())
+                    }
+                    deleteSolutionReq()
+                    console.log(await response.text());
+                })
+                .catch(error => {
+                    console.error("Refresh didn't work: " + error)
+                    navigate("/login");
+                }
+            )
+        }
+
+        deleteSolutionReq();
     }
     
     return(

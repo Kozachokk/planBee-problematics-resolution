@@ -96,13 +96,13 @@ function Problem(props: IProblemComponent){
     }
 
     const deleteProblem = () => {
-        const deleteProblem = () => {
+        const deleteProblemReq = () => {
             const headers: RequestInit = {
                 method: "DELETE",
                 credentials: "include"
             }
 
-            fetch(`${import.meta.env.VITE_BASE_API_URL}/problem/delete/${props.problemId}`, headers)
+            fetch(`${import.meta.env.VITE_BASE_API_URL}/problem/${props.problemId}`, headers)
             .then(async response => {
                 if(!response.ok){
                     return Promise.reject(response.status)
@@ -127,7 +127,7 @@ function Problem(props: IProblemComponent){
                     if(!response.ok){
                         return Promise.reject(await response.text())
                     }
-                    deleteProblem()
+                    deleteProblemReq()
                     console.log(await response.text());
                 })
                 .catch(error => {
@@ -137,7 +137,13 @@ function Problem(props: IProblemComponent){
             )
         }
 
-        deleteProblem();
+        deleteProblemReq();
+    }
+
+    const deleteSolution = (solutionId: number) => {
+        const updated: ISolution[] = solutions.filter(sol => sol.solutionId !== solutionId)
+
+        setSolutions([...updated])
     }
 
     return(
@@ -153,6 +159,7 @@ function Problem(props: IProblemComponent){
                 approvedBy={solution.approvedBy}
                 disapprovedBy={solution.disapprovedBy}
                 proposedBy={solution.proposedBy}
+                deleteSolution={deleteSolution}
             />)}
         <form onSubmit={submitSolution}>
             <textarea className='input-solution' name="input-solution" placeholder="Add Solutions?"></textarea>

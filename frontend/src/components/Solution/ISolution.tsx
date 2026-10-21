@@ -5,3 +5,7 @@ export default interface ISolution {
     disapprovedBy: string[],
     proposedBy: string,
 }
+
+export interface ISolutionComponent extends ISolution{
+    deleteSolution: (solutionId: number) => void;
+}

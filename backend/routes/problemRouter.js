@@ -83,7 +83,7 @@ problemRouter.post("/add", (req, res) => {
 })
 
 // delete post
-problemRouter.delete("/delete/:id", (req, res) => {
+problemRouter.delete("/:id", (req, res) => {
     const problem = getSpecificProblem.get(req.params.id);
 
     // Check if user has permissions to do so
