@@ -74,7 +74,6 @@ function Solution(props: ISolution){
         setDisapprovedBy([...disapprovedBy])
         setApprovedBy([...approvedBy]);
         postReaction(JSON.stringify(body));
-        console.log("approved: " + approvedBy)
     }
 
     const disapprove = () => {

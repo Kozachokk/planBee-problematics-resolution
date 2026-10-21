@@ -1,14 +1,14 @@
 import Solution from "../Solution/Solution";
 import './problem.css'
 import { useNavigate } from "react-router-dom";
-import type IProblem from "./IProblem";
 import type ISolution from "../Solution/ISolution";
 import { useContext, useState } from "react";
 import { UserContext } from "../../contexts/UserContext";
 import type { IUserContext } from "../../@types/UserContext";
+import type { IProblemComponent } from "./IProblem";
 
 
-function Problem(props: IProblem){
+function Problem(props: IProblemComponent){
     const [solutions, setSolutions] = useState<ISolution[]>(props.solutions);
     const navigate = useNavigate()
     const {user} = useContext(UserContext) as IUserContext;
@@ -18,9 +18,9 @@ function Problem(props: IProblem){
         setSolutions(solutions);
     }
 
-    const setSolutionId = (solution: ISolution, solutionId: number) => {
+    const setSolutionId = (oldId: number, solutionId: number) => {
       const updated: ISolution[] = solutions.map((sol) => {
-        if(sol === solution){
+        if(sol.solutionId === oldId){
             sol.solutionId = solutionId;
         }
         return sol;
@@ -49,7 +49,7 @@ function Problem(props: IProblem){
                 const isJSON = response.headers.get('content-type')?.includes('application/json');
                 const responseJson = isJSON && await response.json();
 
-                setSolutionId(solution, responseJson.solutionId)
+                setSolutionId(solution.solutionId, responseJson.solutionId)
             })
             .catch(error => {
                 console.error(error);
@@ -95,9 +95,57 @@ function Problem(props: IProblem){
         postSolution(solution)
     }
 
+    const deleteProblem = () => {
+        const deleteProblem = () => {
+            const headers: RequestInit = {
+                method: "DELETE",
+                credentials: "include"
+            }
+
+            fetch(`${import.meta.env.VITE_BASE_API_URL}/problem/delete/${props.problemId}`, headers)
+            .then(async response => {
+                if(!response.ok){
+                    return Promise.reject(response.status)
+                }
+                props.deleteProblem(props.problemId)
+            })
+            .catch(error => {
+                console.error(error);
+                if(error === 401){
+                    refresh();
+                }
+            })
+        }
+
+        const refresh = () => {
+            const headers: RequestInit = {
+            method: "GET",
+            credentials: "include"
+            }
+            fetch(`${import.meta.env.VITE_BASE_API_URL}/auth/refresh`, headers)
+                .then(async response => {
+                    if(!response.ok){
+                        return Promise.reject(await response.text())
+                    }
+                    deleteProblem()
+                    console.log(await response.text());
+                })
+                .catch(error => {
+                    console.error("Refresh didn't work: " + error)
+                    navigate("/login");
+                }
+            )
+        }
+
+        deleteProblem();
+    }
+
     return(
         <article className="problem">
-            <h2>{props.createdBy}: <span className="subtitle">{props.problemPrompt}</span></h2>
+            <section>
+                <h2>{props.createdBy}: <span className="subtitle">{props.problemPrompt}</span></h2>
+                {(user?.isAdmin || props.createdBy === user?.username) && <button onClick={deleteProblem}>delete</button>}
+            </section>
             {solutions.map(solution => <Solution
                 key={solution.solutionId}
                 solutionId={solution.solutionId}

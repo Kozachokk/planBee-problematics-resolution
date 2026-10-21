@@ -34,6 +34,18 @@
         border: 2px solid var(--color-bg-light);
         border-radius: 10px;
     }
+
+    section{
+        display: flex;
+
+        h2{
+            width: 95%;
+        }
+        button {
+            width: 5%;
+            padding-top: -5%;
+        }
+    }
 }
 
 .problem + .problem{

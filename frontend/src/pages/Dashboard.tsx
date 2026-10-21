@@ -33,10 +33,10 @@ function Dashboard(){
       setProblems(problems);
     }
 
-    const removeIllegalProblem = (problem: IProblem) => {
-      const updated: IProblem[] = problems.filter(prob => prob !== problem)
+    const deleteProblem = (problemId: number) => {
+      const updated: IProblem[] = problems.filter(prob => prob.problemId !== problemId)
 
-      setProblems(updated);
+      setProblems([...updated])
     }
 
     const setProblemId = (problem: IProblem, problemId: number) => {
@@ -79,7 +79,7 @@ function Dashboard(){
             .catch(error => {
                 console.error(error);
                 if(error === "This problem already exists"){
-                    removeIllegalProblem(problem)
+                    deleteProblem(problem.problemId)
                     setErrorPosting("This problem already exists")
                 }
             })
@@ -122,7 +122,6 @@ function Dashboard(){
 
     useFetchData("/problem", parseProblemsData)
 
-
     return(
       <main>
         {problems?.map(problem => <Problem 
@@ -131,8 +130,9 @@ function Dashboard(){
           problemPrompt={problem.problemPrompt}
           solutions={problem.solutions}
           createdBy={problem.createdBy}
+          deleteProblem={deleteProblem}
         />)}
-        {user?.canCreateProblems && <form onSubmit={submitProblem} className='problem-submit-form'>
+        {(user?.canCreateProblems || user?.isAdmin) && <form onSubmit={submitProblem} className='problem-submit-form'>
           <h2>Post new problem?</h2>
           <textarea className='input-solution' name="input-solution" placeholder="Post new problem?"></textarea>
           <button className='submit-solution' type='submit'>Post Problem</button>

@@ -6,3 +6,7 @@ export default interface IProblem{
     solutions: ISolution[],
     createdBy: string,
 };
+
+export interface IProblemComponent extends IProblem{
+    deleteProblem: (prob: number) => void;
+}
