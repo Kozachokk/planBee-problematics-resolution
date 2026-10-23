@@ -23,7 +23,8 @@ export function useFetchData(apiPath: string, callback: (data:any) => void){
                 callback(data);
             })
             .catch(error => {
-                console.error(error);
+                if(import.meta.env.DEV)
+                    console.error(error);
                 if(error == "Not logged in"){
                     refresh();
                     return;
@@ -44,7 +45,6 @@ export function useFetchData(apiPath: string, callback: (data:any) => void){
                     }
 
                     getUserData()
-                    console.log(await response.text());
                 })
                 .catch(error => {
                     console.error("Refresh didn't work: " + error)

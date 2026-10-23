@@ -1,7 +1,7 @@
-import React, { useContext, useState } from "react"
+import React, { useContext, useEffect, useState } from "react"
 import type IProblem from "../components/Problem/IProblem"
 import Problem from "../components/Problem/Problem";
-import { useFetchData } from "../hooks/FetchAPI";
+import { useFetchData } from "../hooks/Fetch";
 import { UserContext } from "../contexts/UserContext";
 import type { IUserContext } from "../@types/UserContext";
 import { useNavigate } from "react-router-dom";
@@ -13,8 +13,6 @@ function Dashboard(){
     const navigate = useNavigate();
     const {user, loginUser} = useContext(UserContext) as IUserContext;
     const [errorPosting, setErrorPosting] = useState("");
-
-    useFetchData("/auth/user", loginUser)
 
     const parseProblemsData = (data:any) => {
       const problems = data.map((prob: any) => (
@@ -120,7 +118,55 @@ function Dashboard(){
         postProblem(problem)
     }
 
-    useFetchData("/problem", parseProblemsData)
+    if(import.meta.env.MODE == "CSS"){
+      const sampleProblems: IProblem[] = [
+        {
+          problemId: 0,
+          problemPrompt: "Problem 1 sample with little text",
+          solutions: [{
+            solutionId: 0,
+            solution: "Lorem ipsum dolor sit amet consectetur adipiscing elit. Consectetur adipiscing elit quisque faucibus ex sapien vitae",
+            approvedBy: ['admin', 'user'],
+            disapprovedBy: [],
+            proposedBy: "admin"
+          },
+          {
+            solutionId: 2,
+            solution: "Lorem ipsum dolor sit amet consectetur adipiscing elit. Consectetur adipiscing elit quisque faucibus ex sapien vitae. Ex sapien vitae pellentesque sem placerat in id. Placerat in id cursus mi pretium tellus duis. Pretium tellus duis convallis tempus leo eu aenean.",
+            approvedBy: ['user'],
+            disapprovedBy: ['admin'],
+            proposedBy: "user"
+          }],
+          createdBy: "admin"
+        },
+        {
+          problemId: 1,
+          problemPrompt: "Lorem ipsum dolor sit amet consectetur adipiscing elit. Consectetur adipiscing elit quisque faucibus ex sapien vitae",
+          solutions: [],
+          createdBy: "user 1"
+        },
+        {
+          problemId: 5,
+          problemPrompt: "Lorem ipsum dolor sit amet consectetur adipiscing elit. Consectetur adipiscing elit quisque faucibus ex sapien vitae. Ex sapien vitae pellentesque sem placerat in id. Placerat in id cursus mi pretium tellus duis. Pretium tellus duis convallis tempus leo eu aenean.",
+          solutions: [],
+          createdBy: "Ilya"
+        }
+      ];
+
+      useEffect(() => {
+        setProblems(sampleProblems);
+        loginUser({
+          userId: 0,
+          username: "admin",
+          isAdmin: true,
+          canCreateProblems: true
+        })
+      }, [])
+    }
+    else {
+      useFetchData("/auth/user", loginUser)
+      useFetchData("/problem", parseProblemsData)
+    }
 
     return(
       <main>

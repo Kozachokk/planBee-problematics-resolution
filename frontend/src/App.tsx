@@ -5,12 +5,14 @@ import Dashboard from "./pages/Dashboard";
 import { UserContext } from "./contexts/UserContext";
 import type { IUserContext } from "./@types/UserContext";
 import { useContext } from "react";
-import { useFetchData } from "./hooks/FetchAPI";
+import { useFetchData } from "./hooks/Fetch";
 
 function App(){
 
   const { loginUser } = useContext(UserContext) as IUserContext
-  useFetchData("/auth/user", loginUser)
+  if(import.meta.env.MODE !== "CSS") {
+    useFetchData("/auth/user", loginUser)
+  }
 
   return(
     <>
