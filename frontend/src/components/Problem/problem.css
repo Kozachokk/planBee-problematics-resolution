@@ -1,6 +1,6 @@
 .problem{
     min-height: 10vh;
-    max-width: 75vw;
+    width: 75vw;
     padding: 10px;
     border-radius: 15px;
     border-top: 2px solid hsl(0, 0%, 95%);
@@ -42,8 +42,15 @@
             width: 95%;
         }
         button {
-            width: 5%;
-            padding-top: -5%;
+            box-sizing: content-box;
+            height: 30px;
+            aspect-ratio: 1 / 1;
+            background-image: url("../../../public/delete-button.svg");
+            background-repeat: no-repeat;
+            background-size: contain;
+            background-position: center;
+
+            border: none;
         }
     }
 }
@@ -51,3 +58,4 @@
 .problem + .problem{
     margin-top: 25px;
 }
+

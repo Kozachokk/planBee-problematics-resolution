@@ -150,7 +150,7 @@ function Problem(props: IProblemComponent){
         <article className="problem">
             <section>
                 <h2>{props.createdBy}: <span className="subtitle">{props.problemPrompt}</span></h2>
-                {(user?.isAdmin || props.createdBy === user?.username) && <button onClick={deleteProblem}>delete</button>}
+                {(user?.isAdmin || props.createdBy === user?.username) && <button onClick={deleteProblem}></button>}
             </section>
             {solutions.map(solution => <Solution
                 key={solution.solutionId}
