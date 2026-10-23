@@ -3,6 +3,7 @@ import './login.css';
 import { useNavigate } from 'react-router-dom';
 import { UserContext } from '../contexts/UserContext';
 import type { IUserContext } from '../@types/UserContext';
+import { fetchPost } from '../util/fetch';
 
 function Login(){
 
@@ -15,6 +16,7 @@ function Login(){
 
     if(user) navigate("/")
 
+    // Add an event listener for the enter key to submit the form, automatically removes it too
     useEffect(() => {
     const listener = (e: KeyboardEvent) => {
         if (e.code === "Enter" || e.code === "NumpadEnter") {
@@ -28,29 +30,19 @@ function Login(){
   }, []);
 
     const login = () => {
-        const requestOption:RequestInit = {
-            method: "POST",
-            headers: { 'Content-Type': 'application/json' },
-            credentials: "include",
-            body: JSON.stringify({
-                username: username,
-                password: password,
-            })
+        const handleResponse = () => {
+            navigate("/")
         }
 
-        fetch(`${import.meta.env.VITE_BASE_API_URL}/auth/login`, requestOption)
-            .then(async response => {
-                if(!response.ok){
-                    const error = await response.text()
-                    return Promise.reject(error);
-                }
+        const handleError = (error: string) => {
+            setError(error + "");
+        }
 
-                navigate("/")
-            })
-            .catch(error => {
-                setError(error + "");
-            }
-        )
+        const loginInformation = {
+            username: username,
+            password: password,
+        }
+        fetchPost("/auth/login", JSON.stringify(loginInformation), handleResponse, handleError)
     }
 
     const submitForm = (e: React.SubmitEvent<HTMLFormElement>) => {

@@ -5,7 +5,7 @@ import Dashboard from "./pages/Dashboard";
 import { UserContext } from "./contexts/UserContext";
 import type { IUserContext } from "./@types/UserContext";
 import { useContext, useEffect } from "react";
-import { get } from "./util/fetch";
+import { fetchGet } from "./util/fetch";
 
 function App(){
 
@@ -23,7 +23,7 @@ function App(){
         }
       }
 
-      get("/auth/user", loginUser, handleError);
+      fetchGet("/auth/user", loginUser, handleError);
     }, [])
   }
   else{

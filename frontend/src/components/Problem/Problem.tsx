@@ -6,6 +6,7 @@ import { useContext, useState } from "react";
 import { UserContext } from "../../contexts/UserContext";
 import type { IUserContext } from "../../@types/UserContext";
 import type { IProblemComponent } from "../../@types/IProblem";
+import { fetchDelete, fetchPost } from "../../util/fetch";
 
 
 function Problem(props: IProblemComponent){
@@ -13,80 +14,48 @@ function Problem(props: IProblemComponent){
     const navigate = useNavigate()
     const {user} = useContext(UserContext) as IUserContext;
 
-    const addSolution = (solution: ISolution) => {
+    const postSolution = (solution: ISolution) => {
+        // Update the ui on the solution adding
         solutions.push(solution);
         setSolutions(solutions);
-    }
 
-    const setSolutionId = (oldId: number, solutionId: number) => {
-      const updated: ISolution[] = solutions.map((sol) => {
-        if(sol.solutionId === oldId){
-            sol.solutionId = solutionId;
-        }
-        return sol;
-      })
-
-      setSolutions(updated);
-    }
-
-    const postSolution = (solution: ISolution) => {
-        addSolution(solution)
-
-        const post = () => {
-            const headers: RequestInit = {
-                method: "POST",
-                credentials: "include",
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({problemId: props.problemId, solution: solution.solution})
-            }
-
-            fetch(`${import.meta.env.VITE_BASE_API_URL}/solution/add`, headers)
-            .then(async response => {
-                if(!response.ok){
-                    return Promise.reject(response.status)
-                }
-
-                const isJSON = response.headers.get('content-type')?.includes('application/json');
-                const responseJson = isJSON && await response.json();
-
-                setSolutionId(solution.solutionId, responseJson.solutionId)
-            })
-            .catch(error => {
-                console.error(error);
-                if(error === 401){
-                    refresh();
-                }
-            })
+        const solutionInfo = {
+            problemId: props.problemId, 
+            solution: solution.solution
         }
 
-        const refresh = () => {
-            const headers: RequestInit = {
-            method: "GET",
-            credentials: "include"
-            }
-            fetch(`${import.meta.env.VITE_BASE_API_URL}/auth/refresh`, headers)
-                .then(async response => {
-                    if(!response.ok){
-                        return Promise.reject(await response.text())
-                    }
-                    post()
-                    console.log(await response.text());
-                })
-                .catch(error => {
-                    console.error("Refresh didn't work: " + error)
+        const handleResponse = (data: any) => {
+            // Update solution on its backend's id
+            const updated: ISolution[] = solutions.map((sol) => {
+                if(sol.solutionId === solution.solutionId){
+                    sol.solutionId = data.solutionId;
+                }
+                return sol;
+            })
+
+            setSolutions(updated);
+        }
+
+        const handleError = (error: string) => {
+            switch (error){
+                case "Not logged in":
                     navigate("/login");
-                }
-            )
+                    break;
+                default:
+                    if(import.meta.env.DEV){
+                        console.error("Post solution: " + error);
+                    }
+            }
         }
 
-        post();
+        fetchPost("/solution/add", JSON.stringify(solutionInfo), handleResponse, handleError)
     }
 
     const submitSolution = (e: React.SubmitEvent<HTMLFormElement>) => {
         e.preventDefault()
         const solution: ISolution = {
             solution: (e.target.elements.namedItem("input-solution") as HTMLInputElement).value,
-            solutionId: Date.now(),
+            solutionId: Date.now(), // Create a temporary solutionId
             approvedBy: [],
             disapprovedBy: [],
             proposedBy: user!.username
@@ -96,48 +65,23 @@ function Problem(props: IProblemComponent){
     }
 
     const deleteProblem = () => {
-        const deleteProblemReq = () => {
-            const headers: RequestInit = {
-                method: "DELETE",
-                credentials: "include"
-            }
-
-            fetch(`${import.meta.env.VITE_BASE_API_URL}/problem/${props.problemId}`, headers)
-            .then(async response => {
-                if(!response.ok){
-                    return Promise.reject(response.status)
-                }
-                props.deleteProblem(props.problemId)
-            })
-            .catch(error => {
-                console.error(error);
-                if(error === 401){
-                    refresh();
-                }
-            })
+        const handleResponse = () => {
+            props.deleteProblem(props.problemId);
         }
 
-        const refresh = () => {
-            const headers: RequestInit = {
-            method: "GET",
-            credentials: "include"
-            }
-            fetch(`${import.meta.env.VITE_BASE_API_URL}/auth/refresh`, headers)
-                .then(async response => {
-                    if(!response.ok){
-                        return Promise.reject(await response.text())
+        const handleError = (error: string) => {
+            switch(error){
+                case "Not logged in":
+                    navigate("/login")
+                    break;
+                default:
+                    if(import.meta.env.DEV){
+                        console.error("Delete problem error: " + error);
                     }
-                    deleteProblemReq()
-                    console.log(await response.text());
-                })
-                .catch(error => {
-                    console.error("Refresh didn't work: " + error)
-                    navigate("/login");
-                }
-            )
+            }
         }
 
-        deleteProblemReq();
+        fetchDelete("/problem", props.problemId, handleResponse, handleError)
     }
 
     const deleteSolution = (solutionId: number) => {

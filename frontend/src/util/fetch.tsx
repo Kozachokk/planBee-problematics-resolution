@@ -16,7 +16,7 @@ export function refresh(callback: () => void, callbackFail: (error: string) => v
     )
 }
 
-export function post(path: string, body: string, callback: (data:any) => void, callbackFail: (error: string) => void){
+export function fetchPost(path: string, body: string, callback: (data:any) => void, errorCallback: (error: string) => void){
     const headers: RequestInit = {
         method: "POST",
         credentials: "include",
@@ -28,7 +28,7 @@ export function post(path: string, body: string, callback: (data:any) => void, c
     .then(async response => {
         if(!response.ok){
             if(response.status == 401) {
-                refresh(() => post(path, body, callback, callbackFail), callbackFail);
+                refresh(() => fetchPost(path, body, callback, errorCallback), errorCallback);
                 return;
             }
             else{
@@ -43,11 +43,11 @@ export function post(path: string, body: string, callback: (data:any) => void, c
 
     })
     .catch(error => {
-        callbackFail(error);
+        errorCallback(error);
     })
 }
 
-export function get(path: string, callback: (data:any) => void, callbackFail: (error: string) => void){
+export function fetchGet(path: string, callback: (data:any) => void, errorCallback: (error: string) => void){
     const headers: RequestInit = {
         method: "GET",
         credentials: "include"
@@ -57,7 +57,7 @@ export function get(path: string, callback: (data:any) => void, callbackFail: (e
     .then(async response => {
         if(!response.ok){
             if(response.status === 401) {
-                refresh(() => get(path, callback, callbackFail), callbackFail);
+                refresh(() => fetchGet(path, callback, errorCallback), errorCallback);
                 return;
             }
             else{
@@ -71,6 +71,34 @@ export function get(path: string, callback: (data:any) => void, callbackFail: (e
         callback(responseJson);
     })
     .catch(error => {
-        callbackFail(error);
+        errorCallback(error);
+    })
+}
+
+export function fetchDelete(path: string, deleteId: number, callback: (data: any) => void, errorCallback: (error: string) => void){
+    const headers: RequestInit = {
+        method: "DELETE",
+        credentials: "include"
+    }
+
+    fetch(import.meta.env.VITE_BASE_API_URL + path + "/" + deleteId, headers)
+    .then(async response => {
+        if(!response.ok){
+            if(response.status === 401) {
+                refresh(() => fetchDelete(path, deleteId, callback, errorCallback), errorCallback);
+                return;
+            }
+            else{
+                return Promise.reject(await response.text())
+            }
+        }
+
+        const isJSON = response.headers.get("content-type")?.includes('application/json');
+        const responseJson = isJSON && await response.json();
+
+        callback(responseJson)
+    })
+    .catch(error => {
+        errorCallback(error);
     })
 }
