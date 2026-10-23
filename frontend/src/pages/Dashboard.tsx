@@ -1,11 +1,12 @@
 import React, { useContext, useEffect, useState } from "react"
-import type IProblem from "../components/Problem/IProblem"
+import type IProblem from "../@types/IProblem"
 import Problem from "../components/Problem/Problem";
 import { useFetchData } from "../hooks/Fetch";
 import { UserContext } from "../contexts/UserContext";
 import type { IUserContext } from "../@types/UserContext";
 import { useNavigate } from "react-router-dom";
 import './dashboard.css'
+import { get, post } from "../util/fetch";
 
 
 function Dashboard(){
@@ -51,59 +52,20 @@ function Dashboard(){
     const postProblem = (problem: IProblem) => {
         addProblem(problem)
 
-        const post = () => {
-            const headers: RequestInit = {
-                method: "POST",
-                credentials: "include",
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({problem: problem.problemPrompt})
-            }
-
-            fetch(`${import.meta.env.VITE_BASE_API_URL}/problem/add`, headers)
-            .then(async response => {
-                if(!response.ok){
-                  if(response.status == 401) refresh();
-                  else{
-                    return Promise.reject(await response.text())
-                  }
-                }
-
-                const isJSON = response.headers.get('content-type')?.includes('application/json');
-                const responseJson = isJSON && await response.json();
-
-                setProblemId(problem, responseJson.problemId)
-                setErrorPosting("")
-            })
-            .catch(error => {
-                console.error(error);
-                if(error === "This problem already exists"){
-                    deleteProblem(problem.problemId)
-                    setErrorPosting("This problem already exists")
-                }
-            })
+        const handleData = (data: any) => {
+          setProblemId(problem, data.problemId)
+          setErrorPosting("")
+        }
+        const handleError = (error: string) => {
+          if(error === "This problem already exists"){
+              deleteProblem(problem.problemId)
+              setErrorPosting("This problem already exists")
+          }
+          console.log(error);
+          // navigate("/login");
         }
 
-        const refresh = () => {
-            const headers: RequestInit = {
-            method: "GET",
-            credentials: "include"
-            }
-            fetch(`${import.meta.env.VITE_BASE_API_URL}/auth/refresh`, headers)
-                .then(async response => {
-                    if(!response.ok){
-                        return Promise.reject(await response.text())
-                    }
-                    post()
-                    console.log(await response.text());
-                })
-                .catch(error => {
-                    console.error("Refresh didn't work: " + error)
-                    navigate("/login");
-                }
-            )
-        }
-
-        post();
+        post("/problem/add", JSON.stringify({problem: problem.problemPrompt}), handleData, handleError)
     }
 
     const submitProblem = (e: React.SubmitEvent<HTMLFormElement>) => {
@@ -155,17 +117,10 @@ function Dashboard(){
 
       useEffect(() => {
         setProblems(sampleProblems);
-        loginUser({
-          userId: 0,
-          username: "admin",
-          isAdmin: true,
-          canCreateProblems: true
-        })
       }, [])
     }
     else {
-      useFetchData("/auth/user", loginUser)
-      useFetchData("/problem", parseProblemsData)
+      get("/problem", parseProblemsData, (error) => console.error(error));
     }
 
     return(

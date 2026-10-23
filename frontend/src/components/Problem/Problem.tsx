@@ -1,11 +1,11 @@
 import Solution from "../Solution/Solution";
 import './problem.css'
 import { useNavigate } from "react-router-dom";
-import type ISolution from "../Solution/ISolution";
+import type ISolution from "../../@types/ISolution";
 import { useContext, useState } from "react";
 import { UserContext } from "../../contexts/UserContext";
 import type { IUserContext } from "../../@types/UserContext";
-import type { IProblemComponent } from "./IProblem";
+import type { IProblemComponent } from "../../@types/IProblem";
 
 
 function Problem(props: IProblemComponent){

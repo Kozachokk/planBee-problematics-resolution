@@ -1,4 +1,4 @@
-import type ISolution from '../Solution/ISolution';
+import type ISolution from './ISolution';
 
 export default interface IProblem{
     problemId: number,

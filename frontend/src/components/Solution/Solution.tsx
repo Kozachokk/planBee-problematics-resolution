@@ -3,7 +3,7 @@ import './solution.css'
 import { useContext, useState } from "react";
 import { UserContext } from "../../contexts/UserContext";
 import type { IUserContext } from "../../@types/UserContext";
-import type { ISolutionComponent } from "./ISolution";
+import type { ISolutionComponent } from "../../@types/ISolution";
 
 function Solution(props: ISolutionComponent){
     const [approvedBy, setApprovedBy] = useState<string[]>(props.approvedBy)
