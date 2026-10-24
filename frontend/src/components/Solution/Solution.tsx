@@ -75,6 +75,11 @@ function Solution(props: ISolutionComponent) {
     }
 
     const deleteSolution = () => {
+        if(import.meta.env.MODE === "CSS") props.deleteSolution(props.solutionId)
+
+        const handleResponse = () => {
+            props.deleteSolution(props.solutionId)
+        }
         const handleError = (error: string) => {
             switch (error) {
                 case "Not logged in":
@@ -85,9 +90,6 @@ function Solution(props: ISolutionComponent) {
                         console.error("Reaction error: " + error);
                     }
             }
-        }
-        const handleResponse = () => {
-            props.deleteSolution(props.solutionId)
         }
         fetchDelete("/solution", props.solutionId, handleResponse, handleError)
     }

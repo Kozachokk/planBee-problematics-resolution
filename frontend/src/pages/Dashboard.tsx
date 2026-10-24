@@ -23,7 +23,7 @@ function Dashboard() {
   const postProblem = (problem: IProblem) => {
     // Add problem to ui
     problems?.push(problem);
-    setProblems(problems);
+    setProblems([...problems]);
 
     const handleResponse = (data: any) => {
       // Update the new problem's id to reflect that of the backend

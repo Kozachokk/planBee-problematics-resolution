@@ -17,7 +17,7 @@ function Problem(props: IProblemComponent) {
     const postSolution = (solution: ISolution) => {
         // Update the ui on the solution adding
         solutions.push(solution);
-        setSolutions(solutions);
+        setSolutions([...solutions]);
 
         const solutionInfo = {
             problemId: props.problemId,
@@ -65,6 +65,8 @@ function Problem(props: IProblemComponent) {
     }
 
     const deleteProblem = () => {
+        if(import.meta.env.MODE === "CSS") props.deleteProblem(props.problemId);
+
         const handleResponse = () => {
             props.deleteProblem(props.problemId);
         }
