@@ -27,8 +27,8 @@ function App() {
     } else {
       loginUser({
         userId: 0,
-        username: "admin",
-        isAdmin: true,
+        username: "user",
+        isAdmin: false,
         canCreateProblems: true
       })
     }

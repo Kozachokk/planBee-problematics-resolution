@@ -108,7 +108,7 @@ function Dashboard() {
           problemId: 1,
           problemPrompt: "Lorem ipsum dolor sit amet consectetur adipiscing elit. Consectetur adipiscing elit quisque faucibus ex sapien vitae",
           solutions: [],
-          createdBy: "user 1"
+          createdBy: "user"
         },
         {
           problemId: 5,
