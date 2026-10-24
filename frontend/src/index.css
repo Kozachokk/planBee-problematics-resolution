@@ -1,14 +1,14 @@
 :root {
-    --color-bg-dark: hsl(0,0%,85%);
-    --color-bg: hsl(0,0%,90%);
-    --color-bg-light: hsl(0,0%,95%);
-    --color-primary: hsl(0,0%,0%);
-    --color-muted: hsl(0,0%, 30%);
+    --color-bg-dark: hsl(0, 0%, 85%);
+    --color-bg: hsl(0, 0%, 90%);
+    --color-bg-light: hsl(0, 0%, 95%);
+    --color-primary: hsl(0, 0%, 0%);
+    --color-muted: hsl(0, 0%, 30%);
     --color-error: rgb(236, 106, 106);
     --color-highlight: hsl(232, 100%, 85%);
 }
 
-body{
+body {
     background-color: var(--color-bg-light);
     color: var(--color-muted);
     display: flex;
@@ -24,6 +24,6 @@ button {
 }
 
 * {
-    margin:0;
+    margin: 0;
     box-sizing: border-box;
 }

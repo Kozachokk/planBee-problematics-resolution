@@ -1,12 +1,12 @@
-export interface IUser{
+export interface IUser {
     userId: number,
     username: string,
     isAdmin: boolean,
     canCreateProblems: boolean,
 }
 
-export interface IUserContext{
+export interface IUserContext {
     user?: IUser,
-    loginUser: (user:IUser) => void,
+    loginUser: (user: IUser) => void,
     clearUser: () => void
 }

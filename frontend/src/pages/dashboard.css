@@ -1,4 +1,4 @@
-.problem-submit-form{
+.problem-submit-form {
     margin: 75px 0 0 0;
     width: 75vw;
     background-color: var(--color-bg);
@@ -7,8 +7,8 @@
     border-bottom: 2px solid hsl(0, 0%, 95%);
     padding: 10px;
 
-    
-    .input-solution{
+
+    .input-solution {
         width: 80%;
         background-color: var(--color-bg);
         color: var(--color-primary);
@@ -16,21 +16,22 @@
         border-radius: 10px;
         padding-left: 10px;
     }
-    .submit-solution{
-        width:20%;
-        left:5%;
+
+    .submit-solution {
+        width: 20%;
+        left: 5%;
         background-color: var(--color-bg);
         color: var(--color-primary);
         border: 2px solid var(--color-bg-light);
         border-radius: 10px;
     }
 
-    .error{
+    .error {
         color: var(--color-error);
         font-size: 1.25em;
     }
 
-    h2{
+    h2 {
         text-align: left;
         padding-left: 10px;
         color: var(--color-primary)

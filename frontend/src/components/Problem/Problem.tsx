@@ -9,10 +9,10 @@ import type { IProblemComponent } from "../../@types/IProblem";
 import { fetchDelete, fetchPost } from "../../util/fetch";
 
 
-function Problem(props: IProblemComponent){
+function Problem(props: IProblemComponent) {
     const [solutions, setSolutions] = useState<ISolution[]>(props.solutions);
     const navigate = useNavigate()
-    const {user} = useContext(UserContext) as IUserContext;
+    const { user } = useContext(UserContext) as IUserContext;
 
     const postSolution = (solution: ISolution) => {
         // Update the ui on the solution adding
@@ -20,14 +20,14 @@ function Problem(props: IProblemComponent){
         setSolutions(solutions);
 
         const solutionInfo = {
-            problemId: props.problemId, 
+            problemId: props.problemId,
             solution: solution.solution
         }
 
         const handleResponse = (data: any) => {
             // Update solution on its backend's id
             const updated: ISolution[] = solutions.map((sol) => {
-                if(sol.solutionId === solution.solutionId){
+                if (sol.solutionId === solution.solutionId) {
                     sol.solutionId = data.solutionId;
                 }
                 return sol;
@@ -37,12 +37,12 @@ function Problem(props: IProblemComponent){
         }
 
         const handleError = (error: string) => {
-            switch (error){
+            switch (error) {
                 case "Not logged in":
                     navigate("/login");
                     break;
                 default:
-                    if(import.meta.env.DEV){
+                    if (import.meta.env.DEV) {
                         console.error("Post solution: " + error);
                     }
             }
@@ -70,12 +70,12 @@ function Problem(props: IProblemComponent){
         }
 
         const handleError = (error: string) => {
-            switch(error){
+            switch (error) {
                 case "Not logged in":
                     navigate("/login")
                     break;
                 default:
-                    if(import.meta.env.DEV){
+                    if (import.meta.env.DEV) {
                         console.error("Delete problem error: " + error);
                     }
             }
@@ -90,7 +90,7 @@ function Problem(props: IProblemComponent){
         setSolutions([...updated])
     }
 
-    return(
+    return (
         <article className="problem">
             <section>
                 <h2>{props.createdBy}: <span className="subtitle">{props.problemPrompt}</span></h2>
@@ -105,10 +105,10 @@ function Problem(props: IProblemComponent){
                 proposedBy={solution.proposedBy}
                 deleteSolution={deleteSolution}
             />)}
-        <form onSubmit={submitSolution}>
-            <textarea className='input-solution' name="input-solution" placeholder="Add Solutions?"></textarea>
-            <button className='submit-solution' type='submit'>Add Solution</button>
-        </form>
+            <form onSubmit={submitSolution}>
+                <textarea className='input-solution' name="input-solution" placeholder="Add Solutions?"></textarea>
+                <button className='submit-solution' type='submit'>Add Solution</button>
+            </form>
         </article>
     );
 }

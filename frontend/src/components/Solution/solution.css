@@ -1,50 +1,52 @@
-.solution{
+.solution {
     margin-bottom: 25px;
     text-align: left;
 
-    .reaction{
+    .reaction {
         background-color: var(--color-bg);
         border: 2px solid var(--color-bg-light);
         border-radius: 50px;
         padding: 5px 10px;
         color: var(--fg2-color);
     }
-    .reaction:hover{
+
+    .reaction:hover {
         border: 2px solid var(--color-highlight);
     }
 
-    .reaction + .reaction{
-        margin-left: 10px;;
+    .reaction+.reaction {
+        margin-left: 10px;
+        ;
     }
 
-    .feedback{
+    .feedback {
         display: flex;
         flex-direction: row;
     }
 
-    .details{
+    .details {
         display: flex;
         flex-direction: row;
         justify-content: space-between;
         padding: 0 10px;
     }
 
-    .highlighted{
+    .highlighted {
         border: 2px solid var(--color-highlight)
     }
-    .highlighted:hover{
+
+    .highlighted:hover {
         border: 2px solid var(--color-bg-light)
     }
 
-    section{
-        h3{
+    section {
+        h3 {
             width: 95%
         }
-        button{
+
+        button {
             width: 5%;
             padding-bottom: 5%;
         }
     }
 }
-
-

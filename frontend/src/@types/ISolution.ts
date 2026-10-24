@@ -6,6 +6,6 @@ export default interface ISolution {
     proposedBy: string,
 }
 
-export interface ISolutionComponent extends ISolution{
+export interface ISolutionComponent extends ISolution {
     deleteSolution: (solutionId: number) => void;
 }

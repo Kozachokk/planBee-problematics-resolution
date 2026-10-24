@@ -7,40 +7,40 @@ import type { IUserContext } from "./@types/UserContext";
 import { useContext, useEffect } from "react";
 import { fetchGet } from "./util/fetch";
 
-function App(){
+function App() {
 
   const navigate = useNavigate()
 
   const { loginUser } = useContext(UserContext) as IUserContext
-  if(import.meta.env.MODE !== "CSS") {
-    useEffect(() => {
-      
+
+  useEffect(() => {
+    if (import.meta.env.MODE !== "CSS") {
       const handleError = (error: string) => {
-        if(error === "Not logged in"){
+        if (error === "Not logged in") {
           navigate("/login");
-        }else{
+        } else {
           console.error(error)
         }
       }
 
       fetchGet("/auth/user", loginUser, handleError);
-    }, [])
-  }
-  else{
-    loginUser({
-      userId: 0,
-      username: "admin",
-      isAdmin: true,
-      canCreateProblems: true
-    })
-  }
+    } else {
+      loginUser({
+        userId: 0,
+        username: "admin",
+        isAdmin: true,
+        canCreateProblems: true
+      })
+    }
+  }, [])
 
-  return(
+
+  return (
     <>
-      <Header/>
+      <Header />
       <Routes>
-        <Route path='/' element={<Dashboard />}/>
-        <Route path="login" element={<Login />}/>
+        <Route path='/' element={<Dashboard />} />
+        <Route path="login" element={<Login />} />
       </Routes>
     </>
   )

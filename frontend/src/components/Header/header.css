@@ -1,16 +1,17 @@
-header{
+header {
     position: absolute;
-    top:0;
-    right:0;
+    top: 0;
+    right: 0;
     width: 100vw;
     display: flex;
     justify-content: space-between;
     padding: 10px 20px;
     color: var(--color-primary);
 
-    h2{
+    h2 {
         font-weight: normal;
-        span{
+
+        span {
             font-weight: bold;
         }
     }
