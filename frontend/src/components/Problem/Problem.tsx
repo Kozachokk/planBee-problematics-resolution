@@ -65,11 +65,7 @@ function Problem(props: IProblemComponent) {
     }
 
     const deleteProblem = () => {
-        if(import.meta.env.MODE === "CSS") props.deleteProblem(props.problemId);
-
-        const handleResponse = () => {
-            props.deleteProblem(props.problemId);
-        }
+        props.deleteProblem(props.problemId);
 
         const handleError = (error: string) => {
             switch (error) {
@@ -83,7 +79,7 @@ function Problem(props: IProblemComponent) {
             }
         }
 
-        fetchDelete("/problem", props.problemId, handleResponse, handleError)
+        fetchDelete("/problem", props.problemId, () => {}, handleError)
     }
 
     const deleteSolution = (solutionId: number) => {
