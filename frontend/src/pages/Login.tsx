@@ -10,7 +10,7 @@ function Login() {
     const [error, setError] = useState("");
     const [username, setUsername] = useState("");
     const [password, setPassword] = useState("");
-    const { user } = useContext(UserContext) as IUserContext;
+    const { user, loginUser } = useContext(UserContext) as IUserContext;
 
     const navigate = useNavigate()
 
@@ -43,8 +43,16 @@ function Login() {
             password: password,
         }
 
-        if (import.meta.env.MODE === "CSS") navigate("/");
-        else fetchPost("/auth/login", JSON.stringify(loginInformation), handleResponse, handleError)
+        if (import.meta.env.MODE === "CSS") {
+            navigate("/")
+            loginUser({
+                userId: 0,
+                username: "admin",
+                isAdmin: true,
+                canCreateProblems: true
+            })
+        }
+        else fetchPost("/auth/login", JSON.stringify(loginInformation), handleResponse, handleError);
     }
 
     const submitForm = (e: React.SubmitEvent<HTMLFormElement>) => {
