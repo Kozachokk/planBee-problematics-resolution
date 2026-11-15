@@ -8,9 +8,9 @@ const sevenDaysInMs = 604800000;
 const hourInMs = 3600000;
 
 const authRouter = express.Router();
-const getUser = db.prepare("SELECT userId FROM user WHERE username = ? AND password = ?;");
+const getUser = db.prepare("SELECT userId, isAdmin, canCreateProblems FROM user WHERE username = ? AND password = ?;");
 
-authRouter.post('/login', cors({origin: "http://localhost:5173", credentials:true}), (req, res) => {
+authRouter.post('/login', (req, res) => {
     //Check if credentials are valid
     const user = getUser.get(req.body.username, req.body.password);
     if(!user){
@@ -34,7 +34,12 @@ authRouter.post('/login', cors({origin: "http://localhost:5173", credentials:tru
         expires: new Date(Date.now() + hourInMs)
     })
 
-    res.status(200).send("Authenticated :thumbs_up:");
+    res.status(200).json({
+        username: req.body.username,
+        userId: user.userId,
+        isAdmin: user.isAdmin,
+        canCreateProblems: user.canCreateProblems
+    });
 })
 
 // TODO implement refresh token rotation
