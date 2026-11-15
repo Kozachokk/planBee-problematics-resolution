@@ -1,0 +1,20 @@
+name: "planBee"
+services:
+  backend:
+    build: backend/.
+    restart: unless-stopped
+    env_file:
+      - .env
+    ports:
+      - "3001:3000"
+    volumes:
+      - db:/app/database
+
+  frontend:
+    build: frontend/.
+    restart: unless-stopped
+    ports:
+      - "5174:80"
+
+volumes:
+  db:

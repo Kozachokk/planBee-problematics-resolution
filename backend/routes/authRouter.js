@@ -43,7 +43,7 @@ authRouter.post('/login', (req, res) => {
 })
 
 // TODO implement refresh token rotation
-authRouter.get('/refresh', cors({origin: "http://localhost:5173", credentials:true}), (req, res) => {
+authRouter.get('/refresh', (req, res) => {
     try{
         const payload = jwt.verify(req.cookies.refreshToken, process.env.JWT_SECRET);
         if(!payload.userId){

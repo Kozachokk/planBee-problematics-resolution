@@ -1,6 +1,6 @@
 import Database from "better-sqlite3";
 
-const db = new Database("db.db");
+const db = new Database("./database/db.db");
 
 const createUserTable = db.prepare(`CREATE TABLE IF NOT EXISTS user(
 userId INTEGER PRIMARY KEY,
