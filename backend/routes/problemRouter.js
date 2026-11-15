@@ -1,7 +1,7 @@
 import express from 'express'
 import db from '../db.js'
 import { validateIdParam } from '../middleware/dataValidation.js';
-import { deleteSolution, getAllSolutionOnProblem } from './solutionRouter.js';
+import { createSolutionObject, deleteSolution, getAllSolutionOnProblem, getSolution } from './solutionRouter.js';
 
 const problemRouter = express.Router();
 
@@ -24,12 +24,19 @@ problemRouter.param("id", validateIdParam)
 // get all problems
 problemRouter.get("/", (req, res) => {
     const problems = getAllProblems.all()
-    res.status(200).json(problems);
+    const problems_solutions = problems.map((problem) => ({
+        problemId: problem.problemId,
+        problem: problem.problem,
+        createdBy: problem.username,
+        solutions: getAllSolutionOnProblem.all(problem.problemId).map((solution) => createSolutionObject(solution)),
+    }))
+    res.status(200).json(problems_solutions);
 })
 
 // get specific post
 problemRouter.get("/:id", (req, res) => {
     const problem = getSpecificProblem.get(req.params.id);
+    problem.solutions = createSolutionObject(getSolution.get(problem.problemId))
 
     // If the queried problem couldn't be fetched
     if(!problem){
@@ -76,7 +83,7 @@ problemRouter.post("/add", (req, res) => {
 })
 
 // delete post
-problemRouter.delete("/delete/:id", (req, res) => {
+problemRouter.delete("/:id", (req, res) => {
     const problem = getSpecificProblem.get(req.params.id);
 
     // Check if user has permissions to do so

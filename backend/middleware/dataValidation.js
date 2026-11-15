@@ -7,6 +7,8 @@ export function validateIdParam(req, res, next, id) {
     next();
 }
 
-export function validateIntegerId(value){
-    return !(isNaN(value) || id <= value)
+
+// Use this more often i guess?
+export function isIdValid(value){
+    return (isNaN(value) || value <= 0)
 }

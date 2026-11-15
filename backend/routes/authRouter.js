@@ -1,7 +1,8 @@
 import express from 'express';
 import db from '../db.js';
-import { generateJWTokens } from '../middleware/authentication.js';
+import { authenticate, generateJWTokens } from '../middleware/authentication.js';
 import jwt from 'jsonwebtoken'
+import cors from 'cors'
 
 const sevenDaysInMs = 604800000;
 const hourInMs = 3600000;
@@ -9,7 +10,7 @@ const hourInMs = 3600000;
 const authRouter = express.Router();
 const getUser = db.prepare("SELECT userId FROM user WHERE username = ? AND password = ?;");
 
-authRouter.post('/login', (req, res) => {
+authRouter.post('/login', cors({origin: "http://localhost:5173", credentials:true}), (req, res) => {
     //Check if credentials are valid
     const user = getUser.get(req.body.username, req.body.password);
     if(!user){
@@ -37,7 +38,7 @@ authRouter.post('/login', (req, res) => {
 })
 
 // TODO implement refresh token rotation
-authRouter.get('/refresh', (req, res) => {
+authRouter.get('/refresh', cors({origin: "http://localhost:5173", credentials:true}), (req, res) => {
     try{
         const payload = jwt.verify(req.cookies.refreshToken, process.env.JWT_SECRET);
         if(!payload.userId){
@@ -77,7 +78,25 @@ authRouter.get('/refresh', (req, res) => {
                 res.status(500).send("Server Error");
         }
     }
+})
 
+authRouter.get("/logout", (req, res) => {
+    res.clearCookie("refreshToken", {
+        httpOnly: true,
+        secure: true,
+        sameSite: "strict",
+    })
+    res.clearCookie("accessToken", {
+        httpOnly: true,
+        secure: true,
+        sameSite: "strict",
+    })
+    res.status(200).send("Logged out");
+})
+
+// Return user data
+authRouter.get("/user", authenticate, (req, res) => {
+    res.status(200).json(req.userData);
 })
 
 export default authRouter;
