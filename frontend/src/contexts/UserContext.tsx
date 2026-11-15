@@ -1,5 +1,6 @@
 import { createContext, useState, type ReactNode } from "react";
 import type { IUser, IUserContext } from "../@types/UserContext";
+import { useNavigate } from "react-router-dom";
 
 export const UserContext = createContext<IUserContext | null>(null)
 
@@ -9,6 +10,7 @@ interface IProps {
 
 function UserContextProvider({ children }: IProps) {
     const [user, setUser] = useState<IUser>()
+    const navigate = useNavigate();
 
     const loginUser = (user: IUser) => {
         const loggedInUser: IUser = {
@@ -18,6 +20,7 @@ function UserContextProvider({ children }: IProps) {
             canCreateProblems: !!user.canCreateProblems,
         }
         setUser(loggedInUser)
+        navigate("/");
     }
 
     const clearUser = () => {

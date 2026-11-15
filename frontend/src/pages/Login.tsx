@@ -1,6 +1,5 @@
 import { useState, useEffect, useContext } from 'react';
 import './login.css';
-import { useNavigate } from 'react-router-dom';
 import { UserContext } from '../contexts/UserContext';
 import type { IUserContext } from '../@types/UserContext';
 import { fetchPost } from '../util/fetch';
@@ -10,11 +9,8 @@ function Login() {
     const [error, setError] = useState("");
     const [username, setUsername] = useState("");
     const [password, setPassword] = useState("");
-    const { user, loginUser } = useContext(UserContext) as IUserContext;
+    const { loginUser } = useContext(UserContext) as IUserContext;
 
-    const navigate = useNavigate()
-
-    if (user) navigate("/")
 
     // Add an event listener for the enter key to submit the form, automatically removes it too
     useEffect(() => {
@@ -30,8 +26,13 @@ function Login() {
     }, []);
 
     const login = () => {
-        const handleResponse = () => {
-            navigate("/")
+        const handleResponse = (data: any) => {
+            loginUser({
+                userId: data.userId,
+                username: data.username,
+                isAdmin: data.isAdmin,
+                canCreateProblems: data.canCreateProblems
+            })
         }
 
         const handleError = (error: string) => {
@@ -44,7 +45,6 @@ function Login() {
         }
 
         if (import.meta.env.MODE === "CSS") {
-            navigate("/")
             loginUser({
                 userId: 0,
                 username: "user",
