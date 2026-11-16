@@ -36,13 +36,12 @@ function App() {
 
 
   return (
-    <>
-      <Header />
       <Routes>
-        <Route path='/' element={<Dashboard />} />
-        <Route path="login" element={<Login />} />
+        <Route element={ <Header />}>
+          <Route path='/' element={<Dashboard />} />
+          <Route path="login" element={<Login />} />
+        </Route>
       </Routes>
-    </>
   )
 }
 
